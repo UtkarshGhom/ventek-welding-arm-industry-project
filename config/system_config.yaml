@@ -1,0 +1,49 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Global System Configuration
+# ============================================================================
+
+system:
+  name: "ventek_autonomous_welding"
+  version: "0.1.0"
+  mode: "simulation"  # Options: simulation, hardware, hybrid
+  log_level: "INFO"    # DEBUG, INFO, WARNING, ERROR
+  log_directory: "data/logs"
+
+coordinate_frames:
+  world_frame: "world"
+  robot_base_frame: "robot_base_link"
+  camera_frame: "camera_link"
+  fixture_frame: "fixture_base_link"
+  tool_frame: "welding_torch_tip"
+
+timing:
+  use_sim_time: true
+  ntp_server: "pool.ntp.org"
+  time_sync_tolerance_ms: 5
+
+safety:
+  enable_collision_checking: true
+  collision_check_rate_hz: 100
+  emergency_stop_enabled: true
+  max_joint_velocity_scale: 0.8   # 80% of robot max
+  workspace_bounds:
+    x_min: -1.5
+    x_max: 1.5
+    y_min: -1.5
+    y_max: 1.5
+    z_min: 0.0
+    z_max: 2.0
+
+execution:
+  default_execution_speed: 0.5    # Fraction of max speed
+  approach_speed: 0.3
+  welding_speed: 0.1
+  retreat_speed: 0.5
+  fixture_rotation_speed: 10.0    # degrees per second
+
+data_storage:
+  raw_data_path: "data/raw"
+  processed_data_path: "data/processed"
+  model_path: "data/models"
+  max_log_size_gb: 50
+  auto_cleanup_days: 30
