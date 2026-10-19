@@ -65,11 +65,12 @@ All system configuration is centralised in `config/`:
 
 ## Documentation
 
-See `docs/` for detailed documentation including:
-- System architecture diagrams
-- API documentation
-- Inter-team interface specifications
-- Team reference materials
+- **Simulation Guide**: [`docs/SIMULATION_GUIDE.md`](docs/SIMULATION_GUIDE.md) — Comprehensive reference for Gazebo Sim Harmonic, 28 coordinate frames, color scheme, active nodes, topic catalog, and depth camera integration.
+- **Reference Document**: [`reference_document.md`](reference_document.md) — Global architecture and cross-team interface specs.
+- Additional team documentation in `docs/`:
+  - System architecture diagrams (`docs/architecture/`)
+  - Subsystem team documentation (`docs/teams/`)
+  - Inter-team interface specifications (`docs/interfaces/`)
 
 ## License
 

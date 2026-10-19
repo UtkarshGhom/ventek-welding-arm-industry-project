@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- KUKA KR 6 R900 sixx (Agilus) Macro for VENTEK Autonomous Welding Cell    -->
+  <!-- Accurate kinematics, joint limits, dynamics, visual/collision meshes     -->
+  <!-- ======================================================================== -->
+
+  <xacro:macro name="kuka_kr6r900" params="prefix:='' parent:='world' *origin">
+
+    <!-- Materials -->
+    <material name="${prefix}kuka_orange">
+      <color rgba="0.965 0.329 0.078 1.0"/>
+    </material>
+    <material name="${prefix}kuka_pedestal_dark">
+      <color rgba="0.2 0.2 0.2 1.0"/>
+    </material>
+    <material name="${prefix}kuka_black">
+      <color rgba="0.1 0.1 0.1 1.0"/>
+    </material>
+
+    <!-- Base attachment to parent -->
+    <joint name="${prefix}base_attachment" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${prefix}base_link"/>
+    </joint>
+
+    <!-- BASE LINK -->
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/visual/base_link.dae"/>
+        </geometry>
+        <material name="${prefix}kuka_pedestal_dark"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/collision/base_link.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="15.0"/>
+        <origin xyz="-0.01 0.0 0.12" rpy="0 0 0"/>
+        <inertia ixx="0.12" ixy="0.0" ixz="0.0" iyy="0.12" iyz="0.0" izz="0.10"/>
+      </inertial>
+    </link>
+
+    <!-- Alias robot_base_link & robot_base to base_link -->
+    <link name="${prefix}robot_base_link"/>
+    <joint name="${prefix}base_link_alias" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}robot_base_link"/>
+    </joint>
+
+    <link name="${prefix}robot_base"/>
+    <joint name="${prefix}robot_base_alias" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}robot_base"/>
+    </joint>
+
+    <!-- LINK 1 -->
+    <link name="${prefix}link_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/visual/link_1.dae"/>
+        </geometry>
+        <material name="${prefix}kuka_orange"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/collision/link_1.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="12.0"/>
+        <origin xyz="0.0 0.03 0.15" rpy="0 0 0"/>
+        <inertia ixx="0.09" ixy="0.0" ixz="0.0" iyy="0.09" iyz="0.0" izz="0.07"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint_a1" type="revolute">
+      <origin xyz="0 0 0.400" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}link_1"/>
+      <axis xyz="0 0 -1"/>
+      <limit effort="150" lower="${-radians(170)}" upper="${radians(170)}" velocity="${radians(360)}"/>
+      <dynamics damping="10.0" friction="1.0"/>
+    </joint>
+
+    <!-- LINK 2 -->
+    <link name="${prefix}link_2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/visual/link_2.dae"/>
+        </geometry>
+        <material name="${prefix}kuka_orange"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/collision/link_2.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="10.0"/>
+        <origin xyz="0.18 0.0 0.05" rpy="0 0 0"/>
+        <inertia ixx="0.08" ixy="0.0" ixz="0.0" iyy="0.18" iyz="0.0" izz="0.18"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint_a2" type="revolute">
+      <origin xyz="0.025 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_1"/>
+      <child link="${prefix}link_2"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="150" lower="${-radians(190)}" upper="${radians(45)}" velocity="${radians(300)}"/>
+      <dynamics damping="10.0" friction="1.0"/>
+    </joint>
+
+    <!-- LINK 3 -->
+    <link name="${prefix}link_3">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/visual/link_3.dae"/>
+        </geometry>
+        <material name="${prefix}kuka_orange"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/collision/link_3.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="7.0"/>
+        <origin xyz="0.01 0.0 0.05" rpy="0 0 0"/>
+        <inertia ixx="0.05" ixy="0.0" ixz="0.0" iyy="0.05" iyz="0.0" izz="0.04"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint_a3" type="revolute">
+      <origin xyz="0.455 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_2"/>
+      <child link="${prefix}link_3"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="100" lower="${-radians(120)}" upper="${radians(156)}" velocity="${radians(360)}"/>
+      <dynamics damping="5.0" friction="0.8"/>
+    </joint>
+
+    <!-- LINK 4 -->
+    <link name="${prefix}link_4">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/visual/link_4.dae"/>
+        </geometry>
+        <material name="${prefix}kuka_orange"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/collision/link_4.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="5.0"/>
+        <origin xyz="0.18 0.0 0.0" rpy="0 0 0"/>
+        <inertia ixx="0.02" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.04"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint_a4" type="revolute">
+      <origin xyz="0 0 0.035" rpy="0 0 0"/>
+      <parent link="${prefix}link_3"/>
+      <child link="${prefix}link_4"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="60" lower="${-radians(185)}" upper="${radians(185)}" velocity="${radians(381)}"/>
+      <dynamics damping="4.0" friction="0.5"/>
+    </joint>
+
+    <!-- LINK 5 -->
+    <link name="${prefix}link_5">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/visual/link_5.dae"/>
+        </geometry>
+        <material name="${prefix}kuka_orange"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/collision/link_5.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="3.0"/>
+        <origin xyz="0.02 0.0 0.0" rpy="0 0 0"/>
+        <inertia ixx="0.015" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.02"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint_a5" type="revolute">
+      <origin xyz="0.420 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_4"/>
+      <child link="${prefix}link_5"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="40" lower="${-radians(120)}" upper="${radians(120)}" velocity="${radians(388)}"/>
+      <dynamics damping="3.0" friction="0.4"/>
+    </joint>
+
+    <!-- LINK 6 -->
+    <link name="${prefix}link_6">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/visual/link_6.dae"/>
+        </geometry>
+        <material name="${prefix}kuka_pedestal_dark"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/robot/meshes/collision/link_6.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="1.0"/>
+        <origin xyz="0.01 0.0 0.0" rpy="0 0 0"/>
+        <inertia ixx="0.005" ixy="0.0" ixz="0.0" iyy="0.005" iyz="0.0" izz="0.005"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint_a6" type="revolute">
+      <origin xyz="0.080 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_5"/>
+      <child link="${prefix}link_6"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="20" lower="${-radians(350)}" upper="${radians(350)}" velocity="${radians(615)}"/>
+      <dynamics damping="1.0" friction="0.2"/>
+    </joint>
+
+    <!-- FLANGE (REP-199 standard attachment) -->
+    <link name="${prefix}flange"/>
+    <joint name="${prefix}joint_a6_flange" type="fixed">
+      <parent link="${prefix}link_6"/>
+      <child link="${prefix}flange"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- TOOL0 (Standard KUKA $TOOL frame rotated by 90 deg around Y) -->
+    <link name="${prefix}tool0"/>
+    <joint name="${prefix}flange_tool0" type="fixed">
+      <parent link="${prefix}flange"/>
+      <child link="${prefix}tool0"/>
+      <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
+    </joint>
+
+    <!-- Transmissions for ROS 2 Control / Simulation -->
+    <xacro:macro name="kuka_transmission" params="joint_name">
+      <transmission name="${joint_name}_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${joint_name}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${joint_name}_motor">
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+    </xacro:macro>
+
+    <xacro:kuka_transmission joint_name="${prefix}joint_a1"/>
+    <xacro:kuka_transmission joint_name="${prefix}joint_a2"/>
+    <xacro:kuka_transmission joint_name="${prefix}joint_a3"/>
+    <xacro:kuka_transmission joint_name="${prefix}joint_a4"/>
+    <xacro:kuka_transmission joint_name="${prefix}joint_a5"/>
+    <xacro:kuka_transmission joint_name="${prefix}joint_a6"/>
+
+    <!-- Gazebo Sim Joint Position Controllers for Interactive Slider Control -->
+    <gazebo>
+      <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+        <joint_name>${prefix}joint_a1</joint_name>
+        <topic>/model/ventek_welding_cell/joint/${prefix}joint_a1/cmd_pos</topic>
+        <p_gain>12000.0</p_gain>
+        <i_gain>10.0</i_gain>
+        <d_gain>250.0</d_gain>
+        <i_max>50.0</i_max>
+        <i_min>-50.0</i_min>
+        <cmd_max>300.0</cmd_max>
+        <cmd_min>-300.0</cmd_min>
+      </plugin>
+      <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+        <joint_name>${prefix}joint_a2</joint_name>
+        <topic>/model/ventek_welding_cell/joint/${prefix}joint_a2/cmd_pos</topic>
+        <p_gain>18000.0</p_gain>
+        <i_gain>20.0</i_gain>
+        <d_gain>350.0</d_gain>
+        <i_max>100.0</i_max>
+        <i_min>-100.0</i_min>
+        <cmd_max>400.0</cmd_max>
+        <cmd_min>-400.0</cmd_min>
+      </plugin>
+      <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+        <joint_name>${prefix}joint_a3</joint_name>
+        <topic>/model/ventek_welding_cell/joint/${prefix}joint_a3/cmd_pos</topic>
+        <p_gain>12000.0</p_gain>
+        <i_gain>10.0</i_gain>
+        <d_gain>250.0</d_gain>
+        <i_max>50.0</i_max>
+        <i_min>-50.0</i_min>
+        <cmd_max>300.0</cmd_max>
+        <cmd_min>-300.0</cmd_min>
+      </plugin>
+      <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+        <joint_name>${prefix}joint_a4</joint_name>
+        <topic>/model/ventek_welding_cell/joint/${prefix}joint_a4/cmd_pos</topic>
+        <p_gain>4000.0</p_gain>
+        <i_gain>5.0</i_gain>
+        <d_gain>80.0</d_gain>
+        <i_max>20.0</i_max>
+        <i_min>-20.0</i_min>
+        <cmd_max>150.0</cmd_max>
+        <cmd_min>-150.0</cmd_min>
+      </plugin>
+      <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+        <joint_name>${prefix}joint_a5</joint_name>
+        <topic>/model/ventek_welding_cell/joint/${prefix}joint_a5/cmd_pos</topic>
+        <p_gain>4000.0</p_gain>
+        <i_gain>5.0</i_gain>
+        <d_gain>80.0</d_gain>
+        <i_max>20.0</i_max>
+        <i_min>-20.0</i_min>
+        <cmd_max>150.0</cmd_max>
+        <cmd_min>-150.0</cmd_min>
+      </plugin>
+      <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+        <joint_name>${prefix}joint_a6</joint_name>
+        <topic>/model/ventek_welding_cell/joint/${prefix}joint_a6/cmd_pos</topic>
+        <p_gain>2000.0</p_gain>
+        <i_gain>2.0</i_gain>
+        <d_gain>30.0</d_gain>
+        <i_max>10.0</i_max>
+        <i_min>-10.0</i_min>
+        <cmd_max>100.0</cmd_max>
+        <cmd_min>-100.0</cmd_min>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

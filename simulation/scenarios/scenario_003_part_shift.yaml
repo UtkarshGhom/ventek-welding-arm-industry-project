@@ -1,0 +1,30 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Scenario 003: Workpiece Shift
+# ============================================================================
+scenario_id: "scenario_003_part_shift"
+description: "Workpiece is loaded with a known offset (+15mm X, +10mm Y). Vision pipeline must detect shift, and planner must adapt trajectory."
+
+robot:
+  model: "KUKA KR 6 R900 sixx"
+  base_pose: [0.0, 0.0, 0.55, 0.0, 0.0, 0.0]
+
+workpiece:
+  part_id: "wp_box_001"
+  model: "workpiece_nominal.stl"
+  parent_frame: "fixture_base_link"
+  # Shifted pose
+  pose: [0.015, 0.010, 0.025, 0.0, 0.0, 0.035]  # Shifted +15mm X, +10mm Y, rotated 2 deg yaw
+  dimensions_mm: [240, 125, 80]
+
+fixture:
+  parent_frame: "world"
+  pose: [0.55, 0.0, 0.75, 0.0, 0.0, 0.0]
+
+expected_outcome:
+  vision_shift_detected: true
+  measured_deviation_mm: [15.0, 10.0, 0.0]
+  ik_success: true
+  reachability_success: true
+  collision_detected: false
+  trajectory_valid: true
+  expected_decision: "ADAPT_TRAJECTORY_TO_DETECTED_POSE"

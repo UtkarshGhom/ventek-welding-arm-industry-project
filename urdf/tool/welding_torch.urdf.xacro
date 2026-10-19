@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- VENTEK Industrial Swan-Neck MIG Welding Torch Description                -->
+  <!-- Accurate TCP (welding_torch_tip & tcp_welding_torch)                     -->
+  <!-- ======================================================================== -->
+
+  <xacro:macro name="welding_torch" params="prefix:='' parent:='tool0' *origin">
+
+    <joint name="${prefix}welding_torch_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${prefix}welding_torch_link"/>
+    </joint>
+
+    <link name="${prefix}welding_torch_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/tool/meshes/welding_torch.dae"/>
+        </geometry>
+        <material name="torch_brass">
+          <color rgba="0.88 0.55 0.18 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/tool/meshes/welding_torch.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="2.2"/>
+        <origin xyz="0.04 0.0 0.12" rpy="0 0 0"/>
+        <inertia ixx="0.015" ixy="0.0" ixz="0.0" iyy="0.018" iyz="0.0" izz="0.008"/>
+      </inertial>
+    </link>
+
+    <!-- Gazebo Shading Material for Welding Torch -->
+    <gazebo reference="${prefix}welding_torch_link">
+      <visual>
+        <material>
+          <ambient>0.60 0.35 0.10 1.0</ambient>
+          <diffuse>0.88 0.55 0.18 1.0</diffuse>
+          <specular>0.70 0.55 0.30 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <!-- Tool Centre Point (TCP) Definition -->
+    <!-- Matches system_config.yaml (welding_torch_tip) -->
+    <link name="${prefix}welding_torch_tip"/>
+    <joint name="${prefix}welding_torch_tip_joint" type="fixed">
+      <origin xyz="0.1344 0.0 0.2574" rpy="0 0.785398 0"/>
+      <parent link="${prefix}welding_torch_link"/>
+      <child link="${prefix}welding_torch_tip"/>
+    </joint>
+
+    <!-- Alias matching simulation plan (tcp_welding_torch) -->
+    <link name="${prefix}tcp_welding_torch"/>
+    <joint name="${prefix}tcp_welding_torch_alias" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}welding_torch_tip"/>
+      <child link="${prefix}tcp_welding_torch"/>
+    </joint>
+
+  </xacro:macro>
+
+</robot>

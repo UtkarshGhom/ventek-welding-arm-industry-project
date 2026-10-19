@@ -1,0 +1,17 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Scenario 005: Sensor Failure
+# ============================================================================
+scenario_id: "scenario_005_sensor_failure"
+description: "Simulated camera occlusion or failure where RGB/depth stream drops below acceptable threshold. System must transition to safe state."
+
+sensor:
+  camera_id: "oak_d_lite_01"
+  status: "degraded_or_offline"
+  depth_valid_ratio: 0.05   # Less than 5% valid depth pixels
+  rgb_stream_active: false
+
+expected_outcome:
+  perception_status: "SENSOR_FAILURE"
+  failure_reason: "CAMERA_STREAM_TIMEOUT_OR_CORRUPT"
+  system_state: "FAULT_SAFE_STOP"
+  expected_decision: "EMERGENCY_STOP_WAIT_OPERATOR"

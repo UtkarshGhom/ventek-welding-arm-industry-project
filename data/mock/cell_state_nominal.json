@@ -1,0 +1,31 @@
+{
+  "header": {
+    "timestamp": "2026-10-18T00:00:02Z",
+    "frame_id": "world",
+    "source": "team2_cell_coordination"
+  },
+  "robot_state": {
+    "controller_mode": "AUTOMATIC",
+    "operational_state": "READY",
+    "e_stop_active": false,
+    "safety_interlock_closed": true,
+    "current_joint_positions": [0.0, -1.047, 1.571, 0.0, 1.047, 0.0],
+    "current_tcp_pose": [0.450, 0.0, 1.10, 0.0, 0.785, 0.0]
+  },
+  "fixture_state": {
+    "fixture_id": "modular_table_01",
+    "clamps": {
+      "clamp_1": {"state": "LOCKED", "pressure_bar": 6.2},
+      "clamp_2": {"state": "LOCKED", "pressure_bar": 6.2},
+      "clamp_3": {"state": "LOCKED", "pressure_bar": 6.2},
+      "clamp_4": {"state": "LOCKED", "pressure_bar": 6.2}
+    },
+    "workpiece_seated": true
+  },
+  "welding_power_source": {
+    "arc_on": false,
+    "gas_flow_active": true,
+    "wire_feed_ready": true,
+    "alarms": []
+  }
+}

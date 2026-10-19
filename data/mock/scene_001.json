@@ -1,1 +1,125 @@
-{}
+{
+  "header": {
+    "timestamp": "2026-10-18T00:00:00Z",
+    "frame_id": "world",
+    "source": "team5_vision_pipeline"
+  },
+  "coordinate_frames": {
+    "world": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+    "robot_base_link": [0.0, 0.0, 0.55, 0.0, 0.0, 0.0, 1.0],
+    "fixture_base_link": [0.55, 0.0, 0.75, 0.0, 0.0, 0.0, 1.0],
+    "part_frame": [0.55, 0.0, 0.775, 0.0, 0.0, 0.0, 1.0],
+    "camera_link": [0.85, 0.0, 1.35, 0.0, 0.38268, 0.92388, 0.0]
+  },
+  "segmented_objects": [
+    {
+      "id": "workpiece_01",
+      "class": "part",
+      "model": "workpiece_nominal.stl",
+      "parent_frame": "fixture_base_link",
+      "pose": {
+        "position": [0.0, 0.0, 0.025],
+        "orientation": [0.0, 0.0, 0.0, 1.0]
+      },
+      "confidence": 0.985
+    },
+    {
+      "id": "fixture_01",
+      "class": "fixture",
+      "parent_frame": "world",
+      "pose": {
+        "position": [0.55, 0.0, 0.75],
+        "orientation": [0.0, 0.0, 0.0, 1.0]
+      },
+      "confidence": 0.992
+    },
+    {
+      "id": "clamp_1",
+      "class": "clamp",
+      "parent_frame": "fixture_base_link",
+      "pose": {
+        "position": [-0.14, -0.13, 0.025],
+        "orientation": [0.0, 0.0, 0.7071, 0.7071]
+      },
+      "state": "clamped",
+      "confidence": 0.978
+    },
+    {
+      "id": "clamp_2",
+      "class": "clamp",
+      "parent_frame": "fixture_base_link",
+      "pose": {
+        "position": [0.14, -0.13, 0.025],
+        "orientation": [0.0, 0.0, 0.7071, 0.7071]
+      },
+      "state": "clamped",
+      "confidence": 0.974
+    },
+    {
+      "id": "clamp_3",
+      "class": "clamp",
+      "parent_frame": "fixture_base_link",
+      "pose": {
+        "position": [-0.14, 0.13, 0.025],
+        "orientation": [0.0, 0.0, -0.7071, 0.7071]
+      },
+      "state": "clamped",
+      "confidence": 0.981
+    },
+    {
+      "id": "clamp_4",
+      "class": "clamp",
+      "parent_frame": "fixture_base_link",
+      "pose": {
+        "position": [0.14, 0.13, 0.025],
+        "orientation": [0.0, 0.0, -0.7071, 0.7071]
+      },
+      "state": "clamped",
+      "confidence": 0.983
+    }
+  ],
+  "candidate_weld_joints": [
+    {
+      "joint_id": "joint_1_longitudinal_fillet",
+      "joint_type": "fillet",
+      "length_m": 0.216,
+      "material": "mild_steel",
+      "thickness_m": 0.003,
+      "reference_frame": "part_frame",
+      "start_point": [-0.108, -0.0525, 0.010],
+      "end_point": [0.108, -0.0525, 0.010],
+      "tangent_vector": [1.0, 0.0, 0.0],
+      "surface_normal": [0.0, 0.7071, 0.7071],
+      "torch_angle_deg": 15.0,
+      "confidence": 0.965
+    },
+    {
+      "joint_id": "joint_2_transverse_fillet",
+      "joint_type": "fillet",
+      "length_m": 0.105,
+      "material": "mild_steel",
+      "thickness_m": 0.003,
+      "reference_frame": "part_frame",
+      "start_point": [-0.108, -0.0525, 0.010],
+      "end_point": [-0.108, 0.0525, 0.010],
+      "tangent_vector": [0.0, 1.0, 0.0],
+      "surface_normal": [0.7071, 0.0, 0.7071],
+      "torch_angle_deg": 15.0,
+      "confidence": 0.952
+    },
+    {
+      "joint_id": "joint_3_vertical_fillet",
+      "joint_type": "fillet",
+      "length_m": 0.070,
+      "material": "mild_steel",
+      "thickness_m": 0.003,
+      "reference_frame": "part_frame",
+      "start_point": [-0.108, -0.0525, 0.010],
+      "end_point": [-0.108, -0.0525, 0.080],
+      "tangent_vector": [0.0, 0.0, 1.0],
+      "surface_normal": [0.7071, 0.7071, 0.0],
+      "torch_angle_deg": 10.0,
+      "confidence": 0.940
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Scenario 001: Nominal Setup
+# ============================================================================
+scenario_id: "scenario_001_nominal"
+description: "Nominal baseline setup with workpiece and clamps in calibrated positions. Collision-free."
+
+robot:
+  model: "KUKA KR 6 R900 sixx"
+  base_pose: [0.0, 0.0, 0.55, 0.0, 0.0, 0.0]  # [x, y, z, roll, pitch, yaw]
+  home_configuration: [0.0, -1.047, 1.571, 0.0, 1.047, 0.0] # [joint_a1..a6 in rad]
+
+workpiece:
+  part_id: "wp_box_001"
+  model: "workpiece_nominal.stl"
+  parent_frame: "fixture_base_link"
+  pose: [0.0, 0.0, 0.025, 0.0, 0.0, 0.0]
+  dimensions_mm: [240, 125, 80]
+  material: "mild_steel"
+  thickness_mm: 3.0
+
+fixture:
+  parent_frame: "world"
+  pose: [0.55, 0.0, 0.75, 0.0, 0.0, 0.0]
+
+clamps:
+  - id: "clamp_1"
+    pose: [-0.14, -0.13, 0.025, 0.0, 0.0, 1.571]
+    state: "clamped"
+    collision_expected: false
+  - id: "clamp_2"
+    pose: [0.14, -0.13, 0.025, 0.0, 0.0, 1.571]
+    state: "clamped"
+    collision_expected: false
+  - id: "clamp_3"
+    pose: [-0.14, 0.13, 0.025, 0.0, 0.0, -1.571]
+    state: "clamped"
+    collision_expected: false
+  - id: "clamp_4"
+    pose: [0.14, 0.13, 0.025, 0.0, 0.0, -1.571]
+    state: "clamped"
+    collision_expected: false
+
+candidate_weld_joints:
+  - joint_id: "weld_joint_1"
+    type: "fillet"
+    length_mm: 216.0
+    nominal_speed_mm_s: 8.0
+    start_point_part_frame: [-0.108, -0.0525, 0.010]
+    end_point_part_frame: [0.108, -0.0525, 0.010]
+    approach_vector: [0.0, 0.0, 0.050]
+    retreat_vector: [0.0, 0.0, 0.050]
+    torch_travel_angle_deg: 15.0
+    torch_work_angle_deg: 45.0
+
+  - joint_id: "weld_joint_2"
+    type: "fillet"
+    length_mm: 105.0
+    nominal_speed_mm_s: 8.0
+    start_point_part_frame: [-0.108, -0.0525, 0.010]
+    end_point_part_frame: [-0.108, 0.0525, 0.010]
+    approach_vector: [0.0, 0.0, 0.050]
+    retreat_vector: [0.0, 0.0, 0.050]
+    torch_travel_angle_deg: 15.0
+    torch_work_angle_deg: 45.0
+
+  - joint_id: "weld_joint_3"
+    type: "fillet"
+    length_mm: 70.0
+    nominal_speed_mm_s: 6.0
+    start_point_part_frame: [-0.108, -0.0525, 0.010]
+    end_point_part_frame: [-0.108, -0.0525, 0.080]
+    approach_vector: [0.0, -0.050, 0.0]
+    retreat_vector: [0.0, -0.050, 0.0]
+    torch_travel_angle_deg: 10.0
+    torch_work_angle_deg: 45.0
+
+expected_outcome:
+  ik_success: true
+  reachability_success: true
+  collision_detected: false
+  trajectory_valid: true
+  expected_decision: "EXECUTE_NOMINAL_PATH"

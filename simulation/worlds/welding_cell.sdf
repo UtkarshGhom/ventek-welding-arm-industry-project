@@ -1,0 +1,317 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="welding_cell">
+
+    <!-- Physics Engine Configuration -->
+    <physics name="1ms" type="dart">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- Essential Gazebo Sim Plugins -->
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
+
+    <!-- GUI Configuration for Gazebo Window -->
+    <gui fullscreen="0">
+      <!-- 3D Scene View -->
+      <plugin filename="MinimalScene" name="3D View">
+        <gz-gui>
+          <title>3D View</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+        </gz-gui>
+        <engine>ogre2</engine>
+        <scene>scene</scene>
+        <ambient_light>0.25 0.25 0.28</ambient_light>
+        <background_color>0.15 0.17 0.20</background_color>
+        <camera_pose>2.2 1.8 1.9 0 0.45 -2.4</camera_pose>
+      </plugin>
+
+      <!-- Essential plugins that attach spawned entities and camera control to 3D scene -->
+      <plugin filename="EntityContextMenuPlugin" name="Entity context menu">
+        <gz-gui>
+          <property key="state" type="string">floating</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </gz-gui>
+      </plugin>
+      <plugin filename="GzSceneManager" name="Scene Manager">
+        <gz-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </gz-gui>
+      </plugin>
+      <plugin filename="InteractiveViewControl" name="Interactive view control">
+        <gz-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </gz-gui>
+      </plugin>
+      <plugin filename="CameraTracking" name="Camera Tracking">
+        <gz-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </gz-gui>
+      </plugin>
+      <plugin filename="MarkerManager" name="Marker manager">
+        <gz-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </gz-gui>
+      </plugin>
+      <plugin filename="SelectEntities" name="Select Entities">
+        <gz-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </gz-gui>
+      </plugin>
+      <plugin filename="VisualizationCapabilities" name="Visualization Capabilities">
+        <gz-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </gz-gui>
+      </plugin>
+
+      <!-- World Control Play/Pause -->
+      <plugin filename="WorldControl" name="World control">
+        <gz-gui>
+          <title>World control</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="bool" key="resizable">false</property>
+          <property type="double" key="height">72</property>
+          <property type="double" key="width">121</property>
+          <property type="double" key="z">1</property>
+          <property type="string" key="state">floating</property>
+          <anchors target="3D View">
+            <line own="left" target="left"/>
+            <line own="bottom" target="bottom"/>
+          </anchors>
+        </gz-gui>
+        <play_pause>true</play_pause>
+        <step>true</step>
+        <start_paused>false</start_paused>
+      </plugin>
+
+      <!-- World Stats -->
+      <plugin filename="WorldStats" name="World stats">
+        <gz-gui>
+          <title>World stats</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="bool" key="resizable">false</property>
+          <property type="double" key="height">110</property>
+          <property type="double" key="width">290</property>
+          <property type="double" key="z">1</property>
+          <property type="string" key="state">floating</property>
+          <anchors target="3D View">
+            <line own="right" target="right"/>
+            <line own="bottom" target="bottom"/>
+          </anchors>
+        </gz-gui>
+        <sim_time>true</sim_time>
+        <real_time>true</real_time>
+        <real_time_factor>true</real_time_factor>
+        <iterations>true</iterations>
+      </plugin>
+
+      <!-- Entity Tree & Component Inspector -->
+      <plugin filename="EntityTree" name="Entity tree">
+        <gz-gui>
+          <property type="string" key="state">docked</property>
+        </gz-gui>
+      </plugin>
+
+      <!-- Interactive Joint Position Controller Sliders in Gazebo Sim GUI -->
+      <plugin filename="JointPositionController" name="Joint position controller">
+        <gz-gui>
+          <property type="string" key="state">docked</property>
+        </gz-gui>
+        <model_name>ventek_welding_cell</model_name>
+      </plugin>
+    </gui>
+
+    <!-- Scene Lighting (Balanced to prevent overexposure/pure white clipping) -->
+    <scene>
+      <ambient>0.25 0.25 0.28 1.0</ambient>
+      <background>0.15 0.17 0.20 1.0</background>
+      <shadows>true</shadows>
+      <grid>true</grid>
+    </scene>
+
+    <!-- Directional Sun Light -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>2 1 4 0 0 0</pose>
+      <diffuse>0.55 0.55 0.58 1</diffuse>
+      <specular>0.10 0.10 0.10 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.4 -0.2 -1.0</direction>
+    </light>
+
+
+    <!-- Industrial Epoxy Workshop Floor -->
+    <model name="workshop_floor">
+      <static>true</static>
+      <link name="floor_link">
+        <collision name="floor_collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>10 10</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="floor_visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>10 10</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.25 0.28 0.30 1</ambient>
+            <diffuse>0.30 0.33 0.36 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Safety Perimeter Fence (Layer A - Cell Envelope) -->
+    <!-- Rear Fence -->
+    <model name="fence_rear">
+      <static>true</static>
+      <pose>-1.1 0 1.0 0 0 1.570796</pose>
+      <link name="fence_link">
+        <collision name="fence_collision">
+          <geometry>
+            <box><size>2.4 0.05 2.0</size></box>
+          </geometry>
+        </collision>
+        <visual name="fence_visual">
+          <geometry>
+            <box><size>2.4 0.04 2.0</size></box>
+          </geometry>
+          <material>
+            <ambient>0.85 0.75 0.1 0.7</ambient>
+            <diffuse>0.90 0.80 0.1 0.7</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Left Fence -->
+    <model name="fence_left">
+      <static>true</static>
+      <pose>0.2 -1.2 1.0 0 0 0</pose>
+      <link name="fence_link">
+        <collision name="fence_collision">
+          <geometry>
+            <box><size>2.6 0.05 2.0</size></box>
+          </geometry>
+        </collision>
+        <visual name="fence_visual">
+          <geometry>
+            <box><size>2.6 0.04 2.0</size></box>
+          </geometry>
+          <material>
+            <ambient>0.85 0.75 0.1 0.7</ambient>
+            <diffuse>0.90 0.80 0.1 0.7</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Right Fence -->
+    <model name="fence_right">
+      <static>true</static>
+      <pose>0.2 1.2 1.0 0 0 0</pose>
+      <link name="fence_link">
+        <collision name="fence_collision">
+          <geometry>
+            <box><size>2.6 0.05 2.0</size></box>
+          </geometry>
+        </collision>
+        <visual name="fence_visual">
+          <geometry>
+            <box><size>2.6 0.04 2.0</size></box>
+          </geometry>
+          <material>
+            <ambient>0.85 0.75 0.1 0.7</ambient>
+            <diffuse>0.90 0.80 0.1 0.7</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- OAK-D Lite RGB-D Camera Sensor Model (Layer F) -->
+    <model name="oak_d_lite_sensor_model">
+      <static>true</static>
+      <pose>0.85 0.0 1.35 0 0.785398 3.141592</pose>
+      <link name="camera_sensor_link">
+        <sensor name="oak_d_lite_camera" type="rgbd_camera">
+          <camera>
+            <horizontal_fov>1.204</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.15</near>
+              <far>4.0</far>
+            </clip>
+            <depth_camera>
+              <clip>
+                <near>0.15</near>
+                <far>4.0</far>
+              </clip>
+            </depth_camera>
+          </camera>
+          <always_on>1</always_on>
+          <update_rate>30</update_rate>
+          <visualize>true</visualize>
+          <topic>/ventek/vision/camera</topic>
+        </sensor>
+      </link>
+    </model>
+
+  </world>
+</sdf>
