@@ -24,12 +24,13 @@ graph TD
         PIDS["JointPositionController System<br/>(6x Closed-Loop PID Actuators)"]
         DART["DART Physics Engine (1ms step)"]
         KUKA["KUKA KR 6 R900 Robot Arm"]
-        CAM["Luxonis OAK-D Lite Sensor Model<br/>(RGB-D 640x480 @ 30 Hz)"]
+        CAM["Luxonis OAK-D Lite (Eye-in-Hand)<br/>(RGB-D 640x480 @ 30 Hz on Torch)"]
         CELL["Welding Cell World<br/>(Table, Fixture, Part, Clamps, Torch)"]
         
         PIDS --> KUKA
         KUKA --> DART
-        CELL --> CAM
+        KUKA --> CAM
+        CELL -.->|Visual Scene| CAM
     end
 
     BRIDGE_NODE -->|"/model/ventek_welding_cell/joint/joint_a{i}/cmd_pos"| CMD_B

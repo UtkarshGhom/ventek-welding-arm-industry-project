@@ -112,12 +112,13 @@ graph TD
         PIDS["JointPositionController System<br/>(6x Closed-Loop PID Actuators)"]
         DART["DART Physics Engine (1ms step)"]
         KUKA["KUKA KR 6 R900 Robot Arm"]
-        CAM["Luxonis OAK-D Lite Sensor Model<br/>(RGB-D 640x480 @ 30 Hz)"]
+        CAM["Luxonis OAK-D Lite (Eye-in-Hand)<br/>(RGB-D 640x480 @ 30 Hz on Torch)"]
         CELL["Welding Cell World<br/>(Table, Fixture, Part, Clamps, Torch)"]
         
         PIDS --> KUKA
         KUKA --> DART
-        CELL --> CAM
+        KUKA --> CAM
+        CELL -.->|Visual Scene| CAM
     end
 
     BRIDGE_NODE -->|"/model/ventek_welding_cell/joint/joint_a{i}/cmd_pos"| CMD_B
@@ -179,9 +180,10 @@ graph TD
     FIXTURE --> C3["clamp_3 (Rear-Left)"]:::fixture
     FIXTURE --> C4["clamp_4 (Rear-Right)"]:::fixture
 
-    %% Sensor Suite Branch
-    WORLD --> CAM["camera_link<br/>(camera_frame)<br/>[0.85, 0.0, 1.35] @ 45 deg pitch"]:::camera
+    %% Eye-in-Hand Sensor Suite Branch (Mounted on Welding Torch)
+    TORCH --> CAM["camera_link<br/>(camera_frame)<br/>Eye-in-Hand Bracket<br/>[-0.04, 0.0, 0.14] @ 47 deg pitch"]:::camera
     CAM --> OPTICAL["camera_optical_frame<br/>(+Z forward, +X right, +Y down)"]:::camera
+    CAM --> GZ_ALIAS["oak_d_lite_camera<br/>(Gazebo Sensor Frame Alias)"]:::camera
 
     %% Auxiliary Equipment Branch
     WORLD --> KRC4["krc4_cabinet<br/>[-0.65, 0.75, 0.0]"]:::equip
@@ -218,7 +220,7 @@ graph TD
 | `clamp_2` | `fixture_base_link` | `(0.14, -0.13, 0.025)` | `(0, 0, π/2)` | Front-Right Destaco vertical toggle clamp |
 | `clamp_3` | `fixture_base_link` | `(-0.14, 0.13, 0.025)` | `(0, 0, -π/2)` | Rear-Left Destaco vertical toggle clamp |
 | `clamp_4` | `fixture_base_link` | `(0.14, 0.13, 0.025)` | `(0, 0, -π/2)` | Rear-Right Destaco vertical toggle clamp |
-| `camera_link` | `world` | `(0.85, 0.0, 1.35)` | `(0, π/4, π)` | OAK-D Lite camera body (pitch down 45° toward part) |
+| `camera_link` | `welding_torch_link` | `(-0.04, 0.0, 0.14)` | `(0, 0.82, 0)` | **Eye-in-Hand** OAK-D Lite depth camera bracket (47° pitch aiming at nozzle & seam) |
 | `camera_optical_frame` | `camera_link` | `(0, 0, 0)` | `(-π/2, 0, -π/2)` | Standard optical frame (+Z forward, +X right, +Y down) |
 | `camera_frame` | `camera_link` | `(0, 0, 0)` | `(0, 0, 0)` | Alias matching vision pipeline contracts |
 | `krc4_cabinet` | `world` | `(-0.65, 0.75, 0.0)` | `(0, 0, 0)` | KUKA KRC4 controller cabinet footprint |
@@ -364,7 +366,7 @@ The following flowchart illustrates the transformation pipeline from raw Gazebo 
 flowchart TD
     subgraph GZ_SIM["Gazebo Sim Environment"]
         SCENE["3D Colored Scene<br/>(Milled Steel Part, Blue Base, Red Clamps)"]
-        SENSOR["Luxonis OAK-D Lite RGB-D Plugin<br/>(Pose: [0.85, 0.0, 1.35], 45° Pitch)"]
+        SENSOR["Luxonis OAK-D Lite RGB-D (Eye-in-Hand)<br/>(Mounted on Welding Torch Arm, 47° Pitch)"]
         SCENE --> SENSOR
     end
 
@@ -409,12 +411,13 @@ flowchart TD
 </details>
 
 ### Sensor Specifications
-- **Sensor Type**: Gazebo RGB-D Camera (`rgbd_camera`)
-- **Mount Pose**: `x=0.85m, y=0.0m, z=1.35m`, pitch 45° down (`rpy="0 0.785398 3.141592"`)
-- **Horizontal FOV**: $1.204\text{ rad} \approx 69^\circ$
-- **Resolution**: $640 \times 480$ pixels
-- **Clip Range**: Near = 0.15 m, Far = 4.0 m
-- **Workpiece Working Distance**: $\approx 0.85\text{ m}$ (within the optimal high-accuracy range of OAK-D Lite)
+- **Sensor Configuration**: **Eye-in-Hand** (Mounted dynamically on `welding_torch_link` arm bracket)
+- **Mount Pose**: `xyz="-0.04 0.0 0.14"`, pitch $47^\circ$ ($0.82\text{ rad}$) aimed at torch nozzle & seam
+- **Horizontal FOV**: $1.204\text{ rad} \approx 69^\circ$ (Vertical FOV $\approx 54^\circ$)
+- **Resolution**: $640 \times 480$ pixels @ 30 Hz
+- **Clip Range**: Near = 0.05 m (50 mm), Far = 4.0 m
+- **Working Distance to Weld Tip**: $\approx 0.22\text{ m}$ (torch nozzle in field-of-view lower boundary, weld seam dead center)
+- **Kinematic Feed**: Continuous dynamic POV updating synchronously with robot arm 6-DOF motion
 
 ### Python Subscriber Snippet: Consuming Depth Maps & Point Clouds
 Team 5 and Team 1 can use the following standard boilerplate to subscribe to depth maps and point clouds:

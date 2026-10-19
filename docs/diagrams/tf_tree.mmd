@@ -30,10 +30,12 @@ graph TD
     FIXTURE --> C3["clamp_3 (Rear-Left)"]:::fixture
     FIXTURE --> C4["clamp_4 (Rear-Right)"]:::fixture
 
-    %% Sensor Suite Branch
-    WORLD --> CAM["camera_link<br/>(camera_frame)<br/>[0.85, 0.0, 1.35] @ 45 deg pitch"]:::camera
+    %% Eye-in-Hand Sensor Suite Branch (Mounted on Welding Torch)
+    TORCH --> CAM["camera_link<br/>(camera_frame)<br/>Eye-in-Hand Bracket<br/>[-0.04, 0.0, 0.14] @ 47 deg pitch"]:::camera
     CAM --> OPTICAL["camera_optical_frame<br/>(+Z forward, +X right, +Y down)"]:::camera
+    CAM --> GZ_ALIAS["oak_d_lite_camera<br/>(Gazebo Sensor Frame Alias)"]:::camera
 
     %% Auxiliary Equipment Branch
     WORLD --> KRC4["krc4_cabinet<br/>[-0.65, 0.75, 0.0]"]:::equip
     WORLD --> POWER["welding_power_unit<br/>[-0.65, -0.75, 0.0]"]:::equip
+
