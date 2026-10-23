@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CorrectionSchema",
+  "description": "Team 4 output: measured seam deviation, filtering, and bounded correction proposal",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "producer",
+    "timestamp",
+    "seq",
+    "frame_id",
+    "valid",
+    "trajectory_id",
+    "trajectory_revision",
+    "joint_id",
+    "measurement",
+    "filtered_offset_m",
+    "proposed_absolute_offset_m",
+    "within_limits",
+    "action_requested",
+    "speed_proposal_m_s",
+    "confidence",
+    "reason",
+    "limits_profile"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "producer": {
+      "type": "string",
+      "const": "team4"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "frame_id": {
+      "type": "string"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "trajectory_id": {
+      "type": "string"
+    },
+    "trajectory_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "joint_id": {
+      "type": "string"
+    },
+    "measurement": {
+      "type": "object",
+      "required": ["planned_position_m", "observed_position_m", "deviation_m"],
+      "properties": {
+        "planned_position_m": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "observed_position_m": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "deviation_m": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "filtered_offset_m": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "proposed_absolute_offset_m": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "within_limits": {
+      "type": "boolean"
+    },
+    "action_requested": {
+      "type": "string",
+      "enum": [
+        "CORRECT_WITH_REVALIDATION",
+        "REQUEST_REPLAN",
+        "REQUEST_PAUSE",
+        "NO_CORRECTION"
+      ]
+    },
+    "speed_proposal_m_s": {
+      "type": ["number", "null"]
+    },
+    "confidence": {
+      "type": ["number", "null"]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "limits_profile": {
+      "type": "string"
+    }
+  }
+}

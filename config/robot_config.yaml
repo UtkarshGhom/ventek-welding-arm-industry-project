@@ -1,0 +1,69 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Robot Configuration
+# ============================================================================
+
+robot:
+  name: "welding_robot"
+  manufacturer: "KUKA"       # Update based on actual robot
+  model: "KR 6 R900"         # Update based on actual robot
+  dof: 6
+  urdf_path: "urdf/robot.urdf"
+  
+  # Joint limits (radians)
+  joint_limits:
+    joint_1: { min: -2.967, max: 2.967 }
+    joint_2: { min: -2.094, max: 2.094 }
+    joint_3: { min: -2.356, max: 2.356 }
+    joint_4: { min: -3.491, max: 3.491 }
+    joint_5: { min: -2.094, max: 2.094 }
+    joint_6: { min: -6.283, max: 6.283 }
+  
+  # Max joint velocities (rad/s)
+  max_velocities:
+    joint_1: 3.49
+    joint_2: 3.49
+    joint_3: 3.49
+    joint_4: 6.11
+    joint_5: 6.11
+    joint_6: 8.73
+  
+  # Max joint accelerations (rad/s²)
+  max_accelerations:
+    joint_1: 10.0
+    joint_2: 10.0
+    joint_3: 10.0
+    joint_4: 15.0
+    joint_5: 15.0
+    joint_6: 20.0
+
+  # Tool (welding torch)
+  tool:
+    name: "welding_torch"
+    tcp_offset:
+      x: 0.0
+      y: 0.0
+      z: 0.200    # 200mm torch length
+      rx: 0.0
+      ry: 0.0
+      rz: 0.0
+    weight_kg: 3.5
+
+  # Home position (radians)
+  home_position: [0.0, -1.571, 1.571, 0.0, 0.0, 0.0]
+
+fixture:
+  name: "welding_fixture"
+  type: "rotary"              # rotary, linear, rotary_linear
+  axes: 1
+  rotation_range_deg: 360
+  max_rotation_speed_deg_s: 30
+  position_relative_to_robot:
+    x: 0.8
+    y: 0.0
+    z: 0.3
+  urdf_path: "urdf/fixture.urdf"
+
+clamps:
+  type: "pneumatic"           # pneumatic, electric, manual
+  count: 4
+  actuation_time_s: 0.5

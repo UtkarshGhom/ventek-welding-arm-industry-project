@@ -1,0 +1,25 @@
+{
+  "schema_version": "0.1",
+  "producer": "team1",
+  "timestamp": "2026-10-25T10:01:06.150Z",
+  "seq": 8,
+  "frame_id": "robot_base",
+  "valid": true,
+  "decision_id": "cmd_0003",
+  "state": "EXECUTING",
+  "next_state": "PAUSED",
+  "action": "pause_execution",
+  "target": {
+    "joint_id": "candidate_001",
+    "trajectory_ref": "traj_001",
+    "fixture_angle_rad": null
+  },
+  "reason_code": "EXCESSIVE_DEVIATION_DETECTED",
+  "reason_text": "Team 4 requested replan due to deviation exceeding allowable dynamic limits; safe pause initiated",
+  "inputs_used": {
+    "correction_seq": 9,
+    "cell_state_seq": 13
+  },
+  "requires_human": true,
+  "timeout_s": 120.0
+}

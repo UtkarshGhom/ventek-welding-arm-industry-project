@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SceneSchema",
+  "description": "Team 5 output: scene geometry, calibration status, and candidate weld seams",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "producer",
+    "timestamp",
+    "seq",
+    "frame_id",
+    "units",
+    "valid",
+    "calibration_status",
+    "parts",
+    "candidate_joints"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "producer": {
+      "type": "string",
+      "const": "team5"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "frame_id": {
+      "type": "string"
+    },
+    "units": {
+      "type": "object",
+      "required": ["position", "angle"],
+      "properties": {
+        "position": { "type": "string", "enum": ["m"] },
+        "angle": { "type": "string", "enum": ["rad"] }
+      }
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "calibration_status": {
+      "type": "string",
+      "enum": ["VERIFIED", "UNVERIFIED", "CALIBRATING", "FAILED"]
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["part_id", "type", "pose", "confidence"],
+        "properties": {
+          "part_id": { "type": "string" },
+          "type": { "type": "string" },
+          "mesh_uri": { "type": "string" },
+          "pose": {
+            "type": "object",
+            "required": ["position_m", "orientation_xyzw"],
+            "properties": {
+              "position_m": {
+                "type": "array",
+                "items": { "type": "number" },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "orientation_xyzw": {
+                "type": "array",
+                "items": { "type": "number" },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          }
+        }
+      }
+    },
+    "fixtures": {
+      "type": "array"
+    },
+    "clamps": {
+      "type": "array"
+    },
+    "candidate_joints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "joint_id",
+          "part_ids",
+          "start_point_m",
+          "end_point_m",
+          "length_m",
+          "confidence",
+          "valid",
+          "weld_intent_confirmed",
+          "status"
+        ],
+        "properties": {
+          "joint_id": { "type": "string" },
+          "part_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "joint_type": { "type": "string" },
+          "start_point_m": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "end_point_m": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "direction_unit": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "length_m": { "type": "number", "minimum": 0.0 },
+          "local_normal": {
+            "oneOf": [
+              {
+                "type": "array",
+                "items": { "type": "number" },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              { "type": "null" }
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          },
+          "valid": { "type": "boolean" },
+          "weld_intent_confirmed": { "type": "boolean" },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CANDIDATE_REQUIRES_CONFIRMATION",
+              "CONFIRMED",
+              "REJECTED",
+              "REVIEW_REQUIRED"
+            ]
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

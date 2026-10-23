@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<robot name="ventek_welding_cell" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- VENTEK Autonomous Welding - Complete Cell Architecture Unified XACRO    -->
+  <!-- ======================================================================== -->
+
+  <!-- World Root Link -->
+  <link name="world"/>
+
+  <!-- Sub-assembly Includes -->
+  <xacro:include filename="../robot/kr6r900_arm.urdf.xacro"/>
+  <xacro:include filename="../tool/welding_torch.urdf.xacro"/>
+  <xacro:include filename="../fixtures/welding_cell_elements.urdf.xacro"/>
+
+  <!-- 1. Instantiate Fixed Cell Environment (Table, Fixture, Part, Clamps, Camera, Equipment) -->
+  <xacro:welding_cell_elements parent="world"/>
+
+  <!-- 2. Instantiate KUKA KR 6 R900 Robot on Top of Pedestal Riser (z=0.55m) -->
+  <xacro:kuka_kr6r900 prefix="" parent="robot_pedestal">
+    <origin xyz="0 0 0.55" rpy="0 0 0"/>
+  </xacro:kuka_kr6r900>
+
+  <!-- 3. Instantiate Welding Torch on Robot Flange/tool0 -->
+  <xacro:welding_torch prefix="" parent="tool0">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:welding_torch>
+
+  <!-- ======================================================================== -->
+  <!-- Gazebo Material Colors for Visual Realism                                -->
+  <!-- ======================================================================== -->
+  <gazebo reference="base_link">
+    <visual>
+      <material>
+        <ambient>0.2 0.2 0.2 1.0</ambient>
+        <diffuse>0.2 0.2 0.2 1.0</diffuse>
+      </material>
+    </visual>
+  </gazebo>
+  <gazebo reference="link_1">
+    <visual>
+      <material>
+        <ambient>0.96 0.33 0.08 1.0</ambient>
+        <diffuse>0.96 0.33 0.08 1.0</diffuse>
+      </material>
+    </visual>
+  </gazebo>
+  <gazebo reference="link_2">
+    <visual>
+      <material>
+        <ambient>0.96 0.33 0.08 1.0</ambient>
+        <diffuse>0.96 0.33 0.08 1.0</diffuse>
+      </material>
+    </visual>
+  </gazebo>
+  <gazebo reference="link_3">
+    <visual>
+      <material>
+        <ambient>0.96 0.33 0.08 1.0</ambient>
+        <diffuse>0.96 0.33 0.08 1.0</diffuse>
+      </material>
+    </visual>
+  </gazebo>
+  <gazebo reference="link_4">
+    <visual>
+      <material>
+        <ambient>0.96 0.33 0.08 1.0</ambient>
+        <diffuse>0.96 0.33 0.08 1.0</diffuse>
+      </material>
+    </visual>
+  </gazebo>
+  <gazebo reference="link_5">
+    <visual>
+      <material>
+        <ambient>0.96 0.33 0.08 1.0</ambient>
+        <diffuse>0.96 0.33 0.08 1.0</diffuse>
+      </material>
+    </visual>
+  </gazebo>
+  <gazebo reference="link_6">
+    <visual>
+      <material>
+        <ambient>0.2 0.2 0.2 1.0</ambient>
+        <diffuse>0.2 0.2 0.2 1.0</diffuse>
+      </material>
+    </visual>
+  </gazebo>
+
+</robot>

@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DecisionSchema",
+  "description": "Team 1 output: supervisory state machine transition, command decision, and execution authorization",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "producer",
+    "timestamp",
+    "seq",
+    "frame_id",
+    "valid",
+    "decision_id",
+    "state",
+    "next_state",
+    "action",
+    "target",
+    "reason_code",
+    "reason_text",
+    "inputs_used",
+    "requires_human",
+    "timeout_s"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "producer": {
+      "type": "string",
+      "const": "team1"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "frame_id": {
+      "type": "string"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "decision_id": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "SCANNING",
+        "PLANNING",
+        "VALIDATING",
+        "READY",
+        "EXECUTING",
+        "PAUSED",
+        "REPLANNING",
+        "FAULT",
+        "COMPLETE"
+      ]
+    },
+    "next_state": {
+      "type": "string",
+      "enum": [
+        "SCANNING",
+        "PLANNING",
+        "VALIDATING",
+        "READY",
+        "EXECUTING",
+        "PAUSED",
+        "REPLANNING",
+        "FAULT",
+        "COMPLETE"
+      ]
+    },
+    "action": {
+      "type": "string"
+    },
+    "target": {
+      "type": "object",
+      "required": ["joint_id", "trajectory_ref", "fixture_angle_rad"],
+      "properties": {
+        "joint_id": { "type": ["string", "null"] },
+        "trajectory_ref": { "type": ["string", "null"] },
+        "fixture_angle_rad": { "type": ["number", "null"] }
+      }
+    },
+    "reason_code": {
+      "type": "string"
+    },
+    "reason_text": {
+      "type": "string"
+    },
+    "inputs_used": {
+      "type": "object"
+    },
+    "requires_human": {
+      "type": "boolean"
+    },
+    "timeout_s": {
+      "type": "number",
+      "minimum": 0.0
+    }
+  }
+}

@@ -1,0 +1,23 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Scenario 004: Unreachable Joint
+# ============================================================================
+scenario_id: "scenario_004_unreachable_joint"
+description: "Workpiece or weld seam is defined beyond maximum kinematic reach (radial distance > 0.90m). IK solver must return failure."
+
+robot:
+  model: "KUKA KR 6 R900 sixx"
+  max_reach_m: 0.901
+  base_pose: [0.0, 0.0, 0.55, 0.0, 0.0, 0.0]
+
+candidate_weld_joints:
+  - joint_id: "weld_joint_out_of_reach"
+    type: "fillet"
+    start_point_world_frame: [1.25, 0.0, 0.85]  # 1.25m distance exceeds 0.90m reach
+    end_point_world_frame: [1.45, 0.0, 0.85]
+
+expected_outcome:
+  ik_success: false
+  reachability_success: false
+  failure_reason: "TARGET_OUTSIDE_WORKSPACE_ENVELOPE"
+  trajectory_valid: false
+  expected_decision: "REJECT_PATH_UNREACHABLE_GOAL"

@@ -1,0 +1,52 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Scenario 002: Clamp Obstruction
+# ============================================================================
+scenario_id: "scenario_002_clamp_obstruction"
+description: "Clamp 1 is improperly positioned, intruding into the weld joint 1 trajectory. Collision detection must trigger replanning."
+
+robot:
+  model: "KUKA KR 6 R900 sixx"
+  base_pose: [0.0, 0.0, 0.55, 0.0, 0.0, 0.0]
+
+workpiece:
+  part_id: "wp_box_001"
+  model: "workpiece_nominal.stl"
+  parent_frame: "fixture_base_link"
+  pose: [0.0, 0.0, 0.025, 0.0, 0.0, 0.0]
+
+fixture:
+  parent_frame: "world"
+  pose: [0.55, 0.0, 0.75, 0.0, 0.0, 0.0]
+
+clamps:
+  - id: "clamp_1"
+    # Clamp shifted inward by +50mm Y, directly obstructing Joint 1 path
+    pose: [-0.08, -0.06, 0.025, 0.0, 0.0, 1.571]
+    state: "clamped_obstructing"
+    collision_expected: true
+  - id: "clamp_2"
+    pose: [0.14, -0.13, 0.025, 0.0, 0.0, 1.571]
+    state: "clamped"
+    collision_expected: false
+  - id: "clamp_3"
+    pose: [-0.14, 0.13, 0.025, 0.0, 0.0, -1.571]
+    state: "clamped"
+    collision_expected: false
+  - id: "clamp_4"
+    pose: [0.14, 0.13, 0.025, 0.0, 0.0, -1.571]
+    state: "clamped"
+    collision_expected: false
+
+candidate_weld_joints:
+  - joint_id: "weld_joint_1"
+    type: "fillet"
+    start_point_part_frame: [-0.108, -0.0525, 0.010]
+    end_point_part_frame: [0.108, -0.0525, 0.010]
+
+expected_outcome:
+  ik_success: true
+  reachability_success: true
+  collision_detected: true
+  colliding_objects: ["welding_torch_link", "clamp_1"]
+  trajectory_valid: false
+  expected_decision: "REPLAN_OR_HALT_SAFETY"

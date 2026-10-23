@@ -1,0 +1,48 @@
+{
+  "schema_version": "0.1",
+  "producer": "team2",
+  "timestamp": "2026-10-25T10:02:15.000Z",
+  "seq": 18,
+  "frame_id": "robot_base",
+  "valid": true,
+  "robot": {
+    "robot_state": "fault",
+    "joint_names": [
+      "joint_a1",
+      "joint_a2",
+      "joint_a3",
+      "joint_a4",
+      "joint_a5",
+      "joint_a6"
+    ],
+    "joint_positions_rad": [0.05, -0.45, 0.75, 0.0, 0.65, 0.0],
+    "tcp_position_m": [0.442, -0.0525, 0.785],
+    "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071]
+  },
+  "fixture": {
+    "state": "locked",
+    "angle_rad": 0.0
+  },
+  "clamps": {
+    "state": "locked"
+  },
+  "process": {
+    "welding_active": false,
+    "current_A": 0.0,
+    "voltage_V": 0.0,
+    "travel_speed_m_s": 0.0
+  },
+  "safety": {
+    "plc_ok": false,
+    "estop_active": true,
+    "faults": [
+      "ESTOP_ACTIVATED_SAFETY_CIRCUIT_TRIPPED",
+      "INTERLOCK_GATE_OPEN"
+    ]
+  },
+  "last_command": {
+    "decision_id": "cmd_0002",
+    "status": "failed",
+    "message": "execution aborted due to emergency stop condition"
+  }
+}

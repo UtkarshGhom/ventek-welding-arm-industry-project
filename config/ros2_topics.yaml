@@ -1,0 +1,203 @@
+# ============================================================================
+# VENTEK Autonomous Welding — ROS 2 Topic & Service Contract
+# ============================================================================
+# This file is the SINGLE SOURCE OF TRUTH for all inter-team communication.
+# Any changes MUST be reviewed by the Project Lead.
+# ============================================================================
+
+# ------ Namespaces ------
+namespaces:
+  vision: /ventek/vision
+  planning: /ventek/planning
+  cell: /ventek/cell
+  sensors: /ventek/sensors
+  analytics: /ventek/analytics
+  control: /ventek/control
+  autonomy: /ventek/autonomy
+
+# ------ Topics ------
+topics:
+  # === Team 5 → Team 6, Team 1 (Vision outputs) ===
+  vision_point_cloud:
+    name: /ventek/vision/point_cloud
+    msg_type: sensor_msgs/msg/PointCloud2
+    publisher: team5_vision
+    subscribers: [team6_path_planning, team1_cognitive_autonomy]
+    qos: reliable
+    rate_hz: on_demand
+    description: "Merged, filtered point cloud of the welding cell"
+
+  vision_weld_joints:
+    name: /ventek/vision/weld_joints
+    msg_type: ventek_msgs/msg/WeldJointArray
+    publisher: team5_vision
+    subscribers: [team6_path_planning, team1_cognitive_autonomy]
+    qos: reliable
+    rate_hz: on_demand
+    description: "Detected weld joints with 3D coords, type, length, normals"
+
+  vision_segmentation:
+    name: /ventek/vision/segmentation
+    msg_type: ventek_msgs/msg/SegmentationResult
+    publisher: team5_vision
+    subscribers: [team6_path_planning, team1_cognitive_autonomy]
+    qos: reliable
+    rate_hz: on_demand
+    description: "Segmented objects: part, fixture, clamp, other"
+
+  # === Team 6 → Team 2, Team 4 (Planning outputs) ===
+  planning_trajectory:
+    name: /ventek/planning/trajectory
+    msg_type: trajectory_msgs/msg/JointTrajectory
+    publisher: team6_path_planning
+    subscribers: [team2_cell_coordination, team4_adaptive_control]
+    qos: reliable
+    rate_hz: on_demand
+    description: "Optimised, collision-free joint trajectory"
+
+  planning_torch_poses:
+    name: /ventek/planning/torch_poses
+    msg_type: ventek_msgs/msg/TorchPoseArray
+    publisher: team6_path_planning
+    subscribers: [team2_cell_coordination, team4_adaptive_control]
+    qos: reliable
+    rate_hz: on_demand
+    description: "Torch poses with approach/weld/retreat phases"
+
+  planning_weld_sequence:
+    name: /ventek/planning/weld_sequence
+    msg_type: ventek_msgs/msg/WeldSequence
+    publisher: team6_path_planning
+    subscribers: [team2_cell_coordination, team1_cognitive_autonomy]
+    qos: reliable
+    rate_hz: on_demand
+    description: "Optimal weld sequence with fixture movements"
+
+  # === Team 2 → Team 1, 3, 4 (Cell state) ===
+  cell_robot_state:
+    name: /ventek/cell/robot_state
+    msg_type: ventek_msgs/msg/RobotState
+    publisher: team2_cell_coordination
+    subscribers: [team1_cognitive_autonomy, team3_multimodal_ai, team4_adaptive_control]
+    qos: best_effort
+    rate_hz: 100
+    description: "Joint positions, velocities, end-effector pose"
+
+  cell_fixture_state:
+    name: /ventek/cell/fixture_state
+    msg_type: ventek_msgs/msg/FixtureState
+    publisher: team2_cell_coordination
+    subscribers: [team1_cognitive_autonomy, team3_multimodal_ai]
+    qos: best_effort
+    rate_hz: 10
+    description: "Fixture position, clamp status, PLC states"
+
+  cell_execution_status:
+    name: /ventek/cell/execution_status
+    msg_type: ventek_msgs/msg/ExecutionStatus
+    publisher: team2_cell_coordination
+    subscribers: [team1_cognitive_autonomy]
+    qos: reliable
+    rate_hz: 10
+    description: "Current execution state, progress, errors"
+
+  # === Team 3 → Team 1, 4 (Analytics outputs) ===
+  sensors_welding_signal:
+    name: /ventek/sensors/welding_signal
+    msg_type: ventek_msgs/msg/WeldingSignal
+    publisher: team3_multimodal_ai
+    subscribers: [team4_adaptive_control, team1_cognitive_autonomy]
+    qos: best_effort
+    rate_hz: 1000
+    description: "Current (A), voltage (V), wire feed speed, temperature"
+
+  analytics_quality_score:
+    name: /ventek/analytics/quality_score
+    msg_type: ventek_msgs/msg/QualityScore
+    publisher: team3_multimodal_ai
+    subscribers: [team1_cognitive_autonomy, team4_adaptive_control]
+    qos: reliable
+    rate_hz: 1
+    description: "Predicted weld quality score, defect probability"
+
+  analytics_anomaly_alert:
+    name: /ventek/analytics/anomaly_alert
+    msg_type: ventek_msgs/msg/AnomalyAlert
+    publisher: team3_multimodal_ai
+    subscribers: [team1_cognitive_autonomy, team2_cell_coordination, team4_adaptive_control]
+    qos: reliable
+    rate_hz: event_driven
+    description: "Anomaly detection alert with cause and recommended action"
+
+  # === Team 4 → Team 2 (Control outputs) ===
+  control_corrected_path:
+    name: /ventek/control/corrected_path
+    msg_type: trajectory_msgs/msg/JointTrajectory
+    publisher: team4_adaptive_control
+    subscribers: [team2_cell_coordination]
+    qos: best_effort
+    rate_hz: 100
+    description: "Adaptively corrected trajectory"
+
+  control_adjusted_params:
+    name: /ventek/control/adjusted_params
+    msg_type: ventek_msgs/msg/ProcessParams
+    publisher: team4_adaptive_control
+    subscribers: [team2_cell_coordination]
+    qos: reliable
+    rate_hz: 10
+    description: "Adjusted welding parameters (current, voltage, speed)"
+
+  # === Team 1 → Team 2 (Autonomy commands) ===
+  autonomy_command:
+    name: /ventek/autonomy/command
+    msg_type: ventek_msgs/msg/ExecutionCommand
+    publisher: team1_cognitive_autonomy
+    subscribers: [team2_cell_coordination]
+    qos: reliable
+    rate_hz: event_driven
+    description: "High-level commands: weld next, rotate fixture, pause, stop"
+
+# ------ Services ------
+services:
+  scan_setup:
+    name: /ventek/vision/scan_setup
+    srv_type: ventek_srvs/srv/ScanSetup
+    server: team5_vision
+    clients: [team1_cognitive_autonomy]
+    description: "Trigger a new scan of the welding setup"
+
+  plan_path:
+    name: /ventek/planning/plan_path
+    srv_type: ventek_srvs/srv/PlanPath
+    server: team6_path_planning
+    clients: [team1_cognitive_autonomy]
+    description: "Request path planning for detected joints"
+
+  execute_weld:
+    name: /ventek/cell/execute_weld
+    srv_type: ventek_srvs/srv/ExecuteWeld
+    server: team2_cell_coordination
+    clients: [team1_cognitive_autonomy]
+    description: "Execute a welding operation"
+
+  move_fixture:
+    name: /ventek/cell/move_fixture
+    srv_type: ventek_srvs/srv/MoveFixture
+    server: team2_cell_coordination
+    clients: [team1_cognitive_autonomy]
+    description: "Rotate or move the fixture"
+
+  emergency_stop:
+    name: /ventek/cell/emergency_stop
+    srv_type: std_srvs/srv/Trigger
+    server: team2_cell_coordination
+    clients: [team1_cognitive_autonomy, team4_adaptive_control, team3_multimodal_ai]
+    description: "Emergency stop all motion"
+
+  enable_adaptive_control:
+    name: /ventek/control/enable_adaptive
+    srv_type: std_srvs/srv/SetBool
+    server: team4_adaptive_control
+    clients: [team1_cognitive_autonomy]
+    description: "Enable or disable adaptive path correction"

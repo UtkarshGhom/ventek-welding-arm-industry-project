@@ -1,0 +1,43 @@
+flowchart TD
+    subgraph GZ_SIM["Gazebo Sim Environment"]
+        SCENE["3D Colored Scene<br/>(Milled Steel Part, Blue Base, Red Clamps)"]
+        SENSOR["Luxonis OAK-D Lite RGB-D (Eye-in-Hand)<br/>(Mounted on Welding Torch Arm, 47° Pitch)"]
+        SCENE --> SENSOR
+    end
+
+    subgraph GZ_TOPICS["Gazebo Protobuf Topics"]
+        GZ_RGB["/ventek/vision/camera/image<br/>(gz.msgs.Image, rgb8)"]
+        GZ_DEPTH["/ventek/vision/camera/depth_image<br/>(gz.msgs.Image, 32FC1 in meters)"]
+        GZ_PTS["/ventek/vision/camera/points<br/>(gz.msgs.PointCloudPacked)"]
+        SENSOR --> GZ_RGB
+        SENSOR --> GZ_DEPTH
+        SENSOR --> GZ_PTS
+    end
+
+    subgraph ROS_BRIDGE["ros_gz_bridge"]
+        TRANS["Zero-Copy Message Translation"]
+        GZ_RGB --> TRANS
+        GZ_DEPTH --> TRANS
+        GZ_PTS --> TRANS
+    end
+
+    subgraph ROS_TOPICS["ROS 2 Humble Topics"]
+        ROS_RGB["/ventek/vision/camera/image<br/>(sensor_msgs/Image)"]
+        ROS_DEPTH["/ventek/vision/camera/depth_image<br/>(sensor_msgs/Image 32FC1)"]
+        ROS_PTS["/ventek/vision/camera/points<br/>(sensor_msgs/PointCloud2)"]
+        TRANS --> ROS_RGB
+        TRANS --> ROS_DEPTH
+        TRANS --> ROS_PTS
+    end
+
+    subgraph CONSUMERS["Downstream Vision & CV Consumers"]
+        VIEWER["view_depth_feed (OpenCV HUD)<br/>- Live mouse crosshair probe (mm)<br/>- Turbo/Jet depth heatmap<br/>- Frame snapshot capture ('c')"]
+        TEAM5["Team 5 (Vision Subsystem)<br/>- 2D YOLOv8 Joint & Clamp Segmentation<br/>- Depth unprojection & seam extraction<br/>- 3D Weld Trajectory & Normal generation"]
+        RVIZ_VIEW["RViz2 Display<br/>- PointCloud2 overlay<br/>- TF alignment & Camera frustum"]
+        
+        ROS_RGB --> VIEWER
+        ROS_DEPTH --> VIEWER
+        ROS_RGB --> TEAM5
+        ROS_DEPTH --> TEAM5
+        ROS_PTS --> RVIZ_VIEW
+    end

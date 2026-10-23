@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    actor User as Engineer / Researcher
+    participant GUI as joint_state_publisher_gui
+    participant Bridge as joint_state_to_gz (ROS Node)
+    participant RosGz as ros_gz_bridge (parameter_bridge)
+    participant GzPID as Gazebo PID Position Controller
+    participant DART as Gazebo DART Physics Engine
+    participant RSP as robot_state_publisher
+    participant RViz as RViz2 Display
+
+    User->>GUI: Drags joint slider (e.g. joint_a1 = 45 deg)
+    GUI->>Bridge: Publishes /joint_states (sensor_msgs/JointState)
+    GUI->>RSP: Publishes /joint_states
+    RSP->>RViz: Computes Forward Kinematics & broadcasts /tf
+    Bridge->>RosGz: Unpacks & publishes /model/ventek_welding_cell/joint/joint_a1/cmd_pos (Float64)
+    RosGz->>GzPID: Converts std_msgs to gz.msgs.Double setpoint
+    GzPID->>DART: Calculates closed-loop PID torque (P=12000, I=10, D=250)
+    DART->>DART: Simulates dynamic step (1 ms physics iteration)
+    DART-->>User: Visual robot arm reflects target pose in Gazebo viewport

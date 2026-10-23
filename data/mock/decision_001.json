@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1",
+  "producer": "team1",
+  "timestamp": "2026-10-25T10:01:05.100Z",
+  "seq": 7,
+  "frame_id": "robot_base",
+  "valid": true,
+  "decision_id": "cmd_0002",
+  "state": "READY",
+  "next_state": "EXECUTING",
+  "action": "execute_weld",
+  "target": {
+    "joint_id": "candidate_001",
+    "trajectory_ref": "traj_001",
+    "fixture_angle_rad": null
+  },
+  "reason_code": "TRAJECTORY_VALIDATED_CELL_READY",
+  "reason_text": "Required planning checks passed and cell is ready",
+  "inputs_used": {
+    "scene_seq": 1,
+    "trajectory_seq": 1,
+    "cell_state_seq": 12,
+    "process_feedback_seq": 25,
+    "correction_seq": 8
+  },
+  "requires_human": false,
+  "timeout_s": 60.0
+}

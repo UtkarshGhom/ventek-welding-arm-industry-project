@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1",
+  "producer": "team4",
+  "timestamp": "2026-10-25T10:01:06.000Z",
+  "seq": 9,
+  "frame_id": "robot_base",
+  "valid": true,
+  "trajectory_id": "traj_001",
+  "trajectory_revision": 1,
+  "joint_id": "candidate_001",
+  "measurement": {
+    "planned_position_m": [0.45, 0.02, 0.22],
+    "observed_position_m": [0.45, 0.0235, 0.2215],
+    "deviation_m": [0.0, 0.0035, 0.0015]
+  },
+  "filtered_offset_m": [0.0, 0.0032, 0.0014],
+  "proposed_absolute_offset_m": [0.0, 0.0032, 0.0014],
+  "within_limits": false,
+  "action_requested": "REQUEST_REPLAN",
+  "speed_proposal_m_s": null,
+  "confidence": 0.82,
+  "reason": "measured deviation magnitude (3.5mm) exceeds allowable dynamic correction limit (1.0mm); requesting supervisor replan",
+  "limits_profile": "SIMULATION_ASSUMPTIONS_ONLY"
+}
