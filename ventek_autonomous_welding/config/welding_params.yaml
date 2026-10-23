@@ -1,0 +1,88 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Default Welding Parameters
+# ============================================================================
+# Parameters indexed by: process_type → material → thickness
+# ============================================================================
+
+welding_processes:
+  MIG:
+    mild_steel:
+      3mm:
+        current_A: 220
+        voltage_V: 24
+        travel_speed_mm_s: 8
+        wire_feed_speed_m_min: 6.5
+        torch_angle_deg: 15
+        stand_off_distance_mm: 12
+        gas_flow_l_min: 15
+        gas_type: "Ar/CO2 (82/18)"
+      5mm:
+        current_A: 260
+        voltage_V: 26
+        travel_speed_mm_s: 6
+        wire_feed_speed_m_min: 8.0
+        torch_angle_deg: 15
+        stand_off_distance_mm: 14
+        gas_flow_l_min: 16
+        gas_type: "Ar/CO2 (82/18)"
+      8mm:
+        current_A: 300
+        voltage_V: 28
+        travel_speed_mm_s: 5
+        wire_feed_speed_m_min: 10.0
+        torch_angle_deg: 15
+        stand_off_distance_mm: 15
+        gas_flow_l_min: 18
+        gas_type: "Ar/CO2 (82/18)"
+    stainless_steel:
+      3mm:
+        current_A: 180
+        voltage_V: 22
+        travel_speed_mm_s: 7
+        wire_feed_speed_m_min: 5.5
+        torch_angle_deg: 10
+        stand_off_distance_mm: 12
+        gas_flow_l_min: 14
+        gas_type: "Ar/CO2 (98/2)"
+    aluminium:
+      3mm:
+        current_A: 160
+        voltage_V: 21
+        travel_speed_mm_s: 9
+        wire_feed_speed_m_min: 7.0
+        torch_angle_deg: 10
+        stand_off_distance_mm: 12
+        gas_flow_l_min: 16
+        gas_type: "100% Ar"
+
+  TIG:
+    stainless_steel:
+      3mm:
+        current_A: 120
+        voltage_V: 14
+        travel_speed_mm_s: 3
+        torch_angle_deg: 20
+        stand_off_distance_mm: 5
+        gas_flow_l_min: 10
+        gas_type: "100% Ar"
+
+  Spot:
+    mild_steel:
+      1mm:
+        current_A: 8000
+        squeeze_time_cycles: 15
+        weld_time_cycles: 10
+        hold_time_cycles: 10
+        electrode_force_N: 2500
+
+# Joint type adjustments (multipliers applied to base params)
+joint_type_adjustments:
+  fillet:
+    torch_angle_offset_deg: 45  # Torch tilted 45° toward joint
+    speed_multiplier: 1.0
+  butt:
+    torch_angle_offset_deg: 0
+    speed_multiplier: 0.9       # Slightly slower for butt joints
+  lap:
+    torch_angle_offset_deg: 30
+    speed_multiplier: 1.1

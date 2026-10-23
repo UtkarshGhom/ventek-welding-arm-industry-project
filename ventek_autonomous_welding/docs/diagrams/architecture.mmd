@@ -1,0 +1,46 @@
+graph TD
+    subgraph ROS2["ROS 2 Humble Middleware Environment"]
+        JSP["joint_state_publisher_gui<br/>(6-DOF Joint Sliders)"]
+        BRIDGE_NODE["joint_state_to_gz<br/>(Bridge Publisher Node)"]
+        RSP["robot_state_publisher<br/>(Kinematics & TF Broadcaster)"]
+        VIEWER["view_depth_feed<br/>(Live OpenCV RGB-D HUD)"]
+        RVIZ["RViz2<br/>(3D Multi-Modal Visualizer)"]
+        
+        JSP -->|"/joint_states (30 Hz)"| BRIDGE_NODE
+        JSP -->|"/joint_states (30 Hz)"| RSP
+        RSP -->|"/tf, /tf_static"| RVIZ
+    end
+
+    subgraph PARAM_BRIDGE["ros_gz_bridge (parameter_bridge)"]
+        direction TB
+        CMD_B["Joint Position Bridge<br/>std_msgs/Float64 &rarr; gz.msgs.Double"]
+        IMG_B["Camera RGB Stream Bridge<br/>gz.msgs.Image &rarr; sensor_msgs/Image"]
+        DEP_B["Depth Map Stream Bridge<br/>gz.msgs.Image &rarr; sensor_msgs/Image"]
+        PTS_B["Point Cloud Bridge<br/>gz.msgs.PointCloudPacked &rarr; PointCloud2"]
+        CLK_B["Clock Bridge<br/>gz.msgs.Clock &rarr; rosgraph_msgs/Clock"]
+    end
+
+    subgraph GZ["Gazebo Sim Harmonic (Harmonic 8.14)"]
+        PIDS["JointPositionController System<br/>(6x Closed-Loop PID Actuators)"]
+        DART["DART Physics Engine (1ms step)"]
+        KUKA["KUKA KR 6 R900 Robot Arm"]
+        CAM["Luxonis OAK-D Lite (Eye-in-Hand)<br/>(RGB-D 640x480 @ 30 Hz on Torch)"]
+        CELL["Welding Cell World<br/>(Table, Fixture, Part, Clamps, Torch)"]
+        
+        PIDS --> KUKA
+        KUKA --> DART
+        KUKA --> CAM
+        CELL -.->|Visual Scene| CAM
+    end
+
+    BRIDGE_NODE -->|"/model/ventek_welding_cell/joint/joint_a{i}/cmd_pos"| CMD_B
+    CMD_B --> PIDS
+    CAM --> IMG_B
+    CAM --> DEP_B
+    CAM --> PTS_B
+    DART --> CLK_B
+    
+    IMG_B -->|"/ventek/vision/camera/image"| VIEWER
+    DEP_B -->|"/ventek/vision/camera/depth_image"| VIEWER
+    IMG_B -.-> RVIZ
+    PTS_B -->|"/ventek/vision/camera/points"| RVIZ

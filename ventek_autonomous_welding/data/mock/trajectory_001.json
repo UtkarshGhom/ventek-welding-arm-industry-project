@@ -1,0 +1,62 @@
+{
+  "schema_version": "0.1",
+  "producer": "team6",
+  "timestamp": "2026-10-25T10:01:00.000Z",
+  "trajectory_id": "traj_001",
+  "robot_id": "kuka_kr6_r900",
+  "coordinate_frame": "robot_base",
+  "units": {
+    "position": "m",
+    "joint_position": "rad",
+    "time": "s"
+  },
+  "status": "VALIDATED_CANDIDATE",
+  "joint_names": [
+    "joint_a1",
+    "joint_a2",
+    "joint_a3",
+    "joint_a4",
+    "joint_a5",
+    "joint_a6"
+  ],
+  "waypoints": [
+    {
+      "time_from_start_s": 0.0,
+      "joint_positions_rad": [0.0, -0.5, 0.8, 0.0, 0.6, 0.0],
+      "tcp_position_m": [0.442, -0.0525, 0.835],
+      "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071],
+      "phase": "APPROACH"
+    },
+    {
+      "time_from_start_s": 2.0,
+      "joint_positions_rad": [0.05, -0.45, 0.75, 0.0, 0.65, 0.0],
+      "tcp_position_m": [0.442, -0.0525, 0.785],
+      "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071],
+      "phase": "WELD"
+    },
+    {
+      "time_from_start_s": 12.0,
+      "joint_positions_rad": [0.12, -0.40, 0.70, 0.0, 0.70, 0.0],
+      "tcp_position_m": [0.658, -0.0525, 0.785],
+      "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071],
+      "phase": "WELD"
+    },
+    {
+      "time_from_start_s": 14.0,
+      "joint_positions_rad": [0.10, -0.48, 0.78, 0.0, 0.62, 0.0],
+      "tcp_position_m": [0.658, -0.0525, 0.835],
+      "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071],
+      "phase": "RETREAT"
+    }
+  ],
+  "validation": {
+    "ik": "PASS",
+    "joint_limits": "PASS",
+    "singularity": "NOT_AVAILABLE",
+    "collision": "PASS",
+    "velocity_acceleration": "PASS",
+    "torque": "NOT_AVAILABLE"
+  },
+  "next_action": "READY_FOR_SIMULATION",
+  "failure_reason": null
+}

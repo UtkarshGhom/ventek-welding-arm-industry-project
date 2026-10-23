@@ -1,0 +1,41 @@
+graph TD
+    classDef root fill:#2A2D34,stroke:#4E5D6C,stroke-width:2px,color:#FFFFFF;
+    classDef robot fill:#D35400,stroke:#E67E22,stroke-width:2px,color:#FFFFFF;
+    classDef fixture fill:#2980B9,stroke:#3498DB,stroke-width:2px,color:#FFFFFF;
+    classDef camera fill:#27AE60,stroke:#2ECC71,stroke-width:2px,color:#FFFFFF;
+    classDef equip fill:#7F8C8D,stroke:#95A5A6,stroke-width:2px,color:#FFFFFF;
+
+    WORLD["world<br/>(Global Origin)"]:::root
+
+    %% Robot Kinematic Chain
+    WORLD --> PEDESTAL["robot_pedestal<br/>z = 0.55m riser"]:::robot
+    PEDESTAL --> BASE["base_link<br/>(robot_base_link / robot_base)"]:::robot
+    BASE --> L1["link_1 (A1 Turret)"]:::robot
+    L1 --> L2["link_2 (A2 Shoulder)"]:::robot
+    L2 --> L3["link_3 (A3 Elbow)"]:::robot
+    L3 --> L4["link_4 (A4 Forearm Roll)"]:::robot
+    L4 --> L5["link_5 (A5 Wrist Pitch)"]:::robot
+    L5 --> L6["link_6 (A6 Tool Flange)"]:::robot
+    L6 --> FLANGE["flange"]:::robot
+    FLANGE --> TOOL0["tool0 (DIN ISO 9409-1)"]:::robot
+    TOOL0 --> TORCH["welding_torch_link<br/>(MIG Torch Body)"]:::robot
+    TORCH --> TIP["welding_torch_tip<br/>(tcp_welding_torch)<br/>[0.1344, 0, 0.2574] @ 45 deg"]:::robot
+
+    %% Cell Fixture & Workpiece Branch
+    WORLD --> TABLE["welding_table<br/>x=0.55m, z=0.0m"]:::fixture
+    WORLD --> FIXTURE["fixture_base_link<br/>(fixture_frame)<br/>x=0.55m, z=0.75m"]:::fixture
+    FIXTURE --> PART["part_frame<br/>(Box Weldment Subassembly)<br/>z=0.025m"]:::fixture
+    FIXTURE --> C1["clamp_1 (Front-Left)"]:::fixture
+    FIXTURE --> C2["clamp_2 (Front-Right)"]:::fixture
+    FIXTURE --> C3["clamp_3 (Rear-Left)"]:::fixture
+    FIXTURE --> C4["clamp_4 (Rear-Right)"]:::fixture
+
+    %% Eye-in-Hand Sensor Suite Branch (Mounted on Welding Torch)
+    TORCH --> CAM["camera_link<br/>(camera_frame)<br/>Eye-in-Hand Bracket<br/>[-0.04, 0.0, 0.14] @ 47 deg pitch"]:::camera
+    CAM --> OPTICAL["camera_optical_frame<br/>(+Z forward, +X right, +Y down)"]:::camera
+    CAM --> GZ_ALIAS["oak_d_lite_camera<br/>(Gazebo Sensor Frame Alias)"]:::camera
+
+    %% Auxiliary Equipment Branch
+    WORLD --> KRC4["krc4_cabinet<br/>[-0.65, 0.75, 0.0]"]:::equip
+    WORLD --> POWER["welding_power_unit<br/>[-0.65, -0.75, 0.0]"]:::equip
+

@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- Industrial Spot Welding Gun Macro Definition                             -->
+  <!-- Standard Mounting Flange, Inertial Properties, and Electrode Tip TCP     -->
+  <!-- Scaled proportionately (scale=0.75) for compact realistic integration    -->
+  <!-- ======================================================================== -->
+
+  <xacro:macro name="spot_welding_gun" params="prefix parent *origin scale:=0.75">
+
+    <xacro:property name="gun_scale" value="${scale}"/>
+    <xacro:property name="gun_scale_cube" value="${gun_scale * gun_scale * gun_scale}"/>
+    <xacro:property name="gun_scale_p5" value="${gun_scale * gun_scale * gun_scale * gun_scale * gun_scale}"/>
+
+    <material name="${prefix}gun_steel">
+      <color rgba="0.65 0.65 0.68 1.0"/>
+    </material>
+    <material name="${prefix}copper_electrode">
+      <color rgba="0.85 0.55 0.25 1.0"/>
+    </material>
+
+    <!-- Mount to Robot Tool0 -->
+    <joint name="${prefix}tool0_to_spot_gun" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${prefix}spot_gun_base"/>
+    </joint>
+
+    <!-- Main Gun Body -->
+    <link name="${prefix}spot_gun_base">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/tool/visual/spot_gun.stl" scale="${gun_scale} ${gun_scale} ${gun_scale}"/>
+        </geometry>
+        <material name="${prefix}gun_steel"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/tool/collision/spot_gun.stl" scale="${gun_scale} ${gun_scale} ${gun_scale}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${0.052 * gun_scale} ${0.005 * gun_scale} ${0.419 * gun_scale}" rpy="0 0 0"/>
+        <mass value="${95.0 * gun_scale_cube}"/>
+        <inertia ixx="${8.5 * gun_scale_p5}" ixy="${0.1 * gun_scale_p5}" ixz="${0.4 * gun_scale_p5}" iyy="${7.2 * gun_scale_p5}" iyz="${0.05 * gun_scale_p5}" izz="${2.1 * gun_scale_p5}"/>
+      </inertial>
+    </link>
+
+    <!-- Tool Center Point (TCP): Contact Point between Copper Electrodes -->
+    <joint name="${prefix}spot_tcp_joint" type="fixed">
+      <origin xyz="${0.0713 * gun_scale} ${0.0058 * gun_scale} ${1.1152 * gun_scale}" rpy="0 0 0"/>
+      <parent link="${prefix}spot_gun_base"/>
+      <child link="${prefix}spot_tcp"/>
+    </joint>
+
+    <link name="${prefix}spot_tcp">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${0.008 * gun_scale}"/>
+        </geometry>
+        <material name="${prefix}copper_electrode"/>
+      </visual>
+    </link>
+
+  </xacro:macro>
+
+</robot>

@@ -1,0 +1,55 @@
+# ============================================================================
+# VENTEK Autonomous Welding — Safety Configuration
+# ============================================================================
+
+safety:
+  # E-Stop configuration
+  emergency_stop:
+    enabled: true
+    deceleration_time_s: 0.5
+    hold_position_after_stop: true
+    require_manual_reset: true
+
+  # Joint limit safety margins
+  joint_limit_margin_rad: 0.087   # ~5 degrees from hard limits
+  
+  # Velocity limits
+  max_tcp_velocity_m_s: 1.0       # Maximum tool center point speed
+  max_tcp_acceleration_m_s2: 5.0
+  welding_max_tcp_velocity_m_s: 0.05  # Max during active welding
+  
+  # Collision safety
+  collision:
+    min_clearance_m: 0.010        # 10mm minimum clearance
+    robot_padding_m: 0.005        # 5mm padding on robot collision model
+    check_self_collision: true
+    check_environment_collision: true
+  
+  # Workspace boundaries (hard limits)
+  workspace_envelope:
+    shape: "cylinder"
+    radius_m: 0.9
+    height_m: 1.5
+    base_height_m: 0.0
+  
+  # Process safety
+  welding:
+    max_current_A: 400
+    max_voltage_V: 35
+    max_temperature_C: 800
+    arc_on_timeout_s: 5           # Abort if no arc within 5s
+    max_weld_time_s: 300          # Max continuous weld time
+  
+  # Communication safety
+  communication:
+    heartbeat_timeout_s: 1.0      # Node considered dead after 1s
+    plc_timeout_s: 0.5
+    command_timeout_s: 5.0
+  
+  # Fault response
+  fault_response:
+    sensor_failure: "pause_and_alert"
+    communication_loss: "safe_stop"
+    collision_detected: "emergency_stop"
+    joint_limit_approach: "decelerate_and_stop"
+    temperature_exceeded: "pause_and_alert"

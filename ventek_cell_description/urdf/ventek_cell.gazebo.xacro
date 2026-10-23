@@ -1,0 +1,274 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- Gazebo Sim (Harmonic) Controllers, Visual Aesthetics & Materials         -->
+  <!-- ======================================================================== -->
+
+  <!-- Built-in Gazebo Sim Joint Position Controllers for Synchronized Motion -->
+  <gazebo>
+    <!-- Joint 1 (Base Rotation - 600kg assembly) -->
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>joint_1</joint_name>
+      <topic>/model/ventek_spot_welding_cell/joint/joint_1/cmd_pos</topic>
+      <p_gain>35000.0</p_gain>
+      <d_gain>4500.0</d_gain>
+      <i_gain>0.0</i_gain>
+      <cmd_max>25000.0</cmd_max>
+      <cmd_min>-25000.0</cmd_min>
+    </plugin>
+
+    <!-- Joint 2 (Shoulder Pitch - heavy lifting against gravity) -->
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>joint_2</joint_name>
+      <topic>/model/ventek_spot_welding_cell/joint/joint_2/cmd_pos</topic>
+      <p_gain>45000.0</p_gain>
+      <d_gain>5500.0</d_gain>
+      <i_gain>0.0</i_gain>
+      <cmd_max>30000.0</cmd_max>
+      <cmd_min>-30000.0</cmd_min>
+    </plugin>
+
+    <!-- Joint 3 (Elbow Pitch) -->
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>joint_3</joint_name>
+      <topic>/model/ventek_spot_welding_cell/joint/joint_3/cmd_pos</topic>
+      <p_gain>30000.0</p_gain>
+      <d_gain>4000.0</d_gain>
+      <i_gain>0.0</i_gain>
+      <cmd_max>22000.0</cmd_max>
+      <cmd_min>-22000.0</cmd_min>
+    </plugin>
+
+    <!-- Joint 4 (Forearm Roll) -->
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>joint_4</joint_name>
+      <topic>/model/ventek_spot_welding_cell/joint/joint_4/cmd_pos</topic>
+      <p_gain>12000.0</p_gain>
+      <d_gain>1500.0</d_gain>
+      <i_gain>0.0</i_gain>
+      <cmd_max>10000.0</cmd_max>
+      <cmd_min>-10000.0</cmd_min>
+    </plugin>
+
+    <!-- Joint 5 (Wrist Pitch) -->
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>joint_5</joint_name>
+      <topic>/model/ventek_spot_welding_cell/joint/joint_5/cmd_pos</topic>
+      <p_gain>8000.0</p_gain>
+      <d_gain>1000.0</d_gain>
+      <i_gain>0.0</i_gain>
+      <cmd_max>8000.0</cmd_max>
+      <cmd_min>-8000.0</cmd_min>
+    </plugin>
+
+    <!-- Joint 6 (Wrist Roll) -->
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>joint_6</joint_name>
+      <topic>/model/ventek_spot_welding_cell/joint/joint_6/cmd_pos</topic>
+      <p_gain>4500.0</p_gain>
+      <d_gain>500.0</d_gain>
+      <i_gain>0.0</i_gain>
+      <cmd_max>5000.0</cmd_max>
+      <cmd_min>-5000.0</cmd_min>
+    </plugin>
+
+    <!-- Cell Sliding Door -->
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>cell_door_joint</joint_name>
+      <topic>/model/ventek_spot_welding_cell/joint/cell_door_joint/cmd_pos</topic>
+      <p_gain>5000.0</p_gain>
+      <d_gain>400.0</d_gain>
+      <cmd_max>2000.0</cmd_max>
+      <cmd_min>-2000.0</cmd_min>
+    </plugin>
+
+    <!-- Joint State Publisher for Simulated Joints -->
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>/joint_states_gz</topic>
+    </plugin>
+  </gazebo>
+
+  <!-- ======================================================================== -->
+  <!-- Premium Aesthetics & Visual Materials for Gazebo Sim                     -->
+  <!-- ======================================================================== -->
+
+  <!-- Robot Arm Visuals: Authentic Fanuc Industrial Palette -->
+  <gazebo reference="base_link">
+    <visual>
+      <material>
+        <ambient>0.12 0.12 0.14 1.0</ambient>
+        <diffuse>0.15 0.15 0.18 1.0</diffuse>
+        <specular>0.5 0.5 0.5 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="link_1">
+    <visual>
+      <material>
+        <ambient>0.92 0.68 0.04 1.0</ambient>
+        <diffuse>0.96 0.72 0.05 1.0</diffuse>
+        <specular>0.6 0.6 0.6 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="link_2">
+    <visual>
+      <material>
+        <ambient>0.92 0.68 0.04 1.0</ambient>
+        <diffuse>0.96 0.72 0.05 1.0</diffuse>
+        <specular>0.6 0.6 0.6 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="link_3">
+    <visual>
+      <material>
+        <ambient>0.92 0.68 0.04 1.0</ambient>
+        <diffuse>0.96 0.72 0.05 1.0</diffuse>
+        <specular>0.6 0.6 0.6 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="link_4">
+    <visual>
+      <material>
+        <ambient>0.92 0.68 0.04 1.0</ambient>
+        <diffuse>0.96 0.72 0.05 1.0</diffuse>
+        <specular>0.6 0.6 0.6 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="link_5">
+    <visual>
+      <material>
+        <ambient>0.92 0.68 0.04 1.0</ambient>
+        <diffuse>0.96 0.72 0.05 1.0</diffuse>
+        <specular>0.6 0.6 0.6 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="link_6">
+    <visual>
+      <material>
+        <ambient>0.14 0.14 0.15 1.0</ambient>
+        <diffuse>0.16 0.16 0.18 1.0</diffuse>
+        <specular>0.4 0.4 0.4 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <!-- Spot Gun Visuals: Two-Tone Industrial Carbon & Polished Copper -->
+  <gazebo reference="spot_gun_base">
+    <visual>
+      <material>
+        <ambient>0.28 0.30 0.34 1.0</ambient>
+        <diffuse>0.35 0.38 0.44 1.0</diffuse>
+        <specular>0.7 0.7 0.7 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="spot_tcp">
+    <visual>
+      <material>
+        <ambient>0.95 0.55 0.15 1.0</ambient>
+        <diffuse>0.98 0.60 0.20 1.0</diffuse>
+        <emissive>0.3 0.15 0.05 1.0</emissive>
+      </material>
+    </visual>
+  </gazebo>
+
+  <!-- Robot Pedestal Riser -->
+  <gazebo reference="robot_pedestal">
+    <visual>
+      <material>
+        <ambient>0.22 0.24 0.26 1.0</ambient>
+        <diffuse>0.26 0.28 0.32 1.0</diffuse>
+        <specular>0.3 0.3 0.3 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <!-- Cell Enclosure: Sleek Dark Anthracite Frame -->
+  <gazebo reference="cell_base">
+    <visual>
+      <material>
+        <ambient>0.18 0.20 0.22 1.0</ambient>
+        <diffuse>0.22 0.24 0.28 1.0</diffuse>
+        <specular>0.5 0.5 0.5 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <!-- Sliding Door: Contrasting Metallic Aluminum -->
+  <gazebo reference="cell_door">
+    <visual>
+      <material>
+        <ambient>0.75 0.76 0.78 1.0</ambient>
+        <diffuse>0.82 0.83 0.86 1.0</diffuse>
+        <specular>0.7 0.7 0.7 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <!-- Fixture Carts: Industrial Machinery Blue (matching concept reference) -->
+  <gazebo reference="fixture_station_1">
+    <visual>
+      <material>
+        <ambient>0.10 0.28 0.52 1.0</ambient>
+        <diffuse>0.14 0.36 0.64 1.0</diffuse>
+        <specular>0.4 0.4 0.4 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="fixture_station_2">
+    <visual>
+      <material>
+        <ambient>0.10 0.28 0.52 1.0</ambient>
+        <diffuse>0.14 0.36 0.64 1.0</diffuse>
+        <specular>0.4 0.4 0.4 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <!-- Workpieces: Stamped Steel Sheet Metal -->
+  <gazebo reference="workpiece_station_1">
+    <visual>
+      <material>
+        <ambient>0.65 0.68 0.72 1.0</ambient>
+        <diffuse>0.75 0.78 0.82 1.0</diffuse>
+        <specular>0.8 0.8 0.8 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="workpiece_station_2">
+    <visual>
+      <material>
+        <ambient>0.65 0.68 0.72 1.0</ambient>
+        <diffuse>0.75 0.78 0.82 1.0</diffuse>
+        <specular>0.8 0.8 0.8 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+  <!-- PLC Cabinet: Fanuc Light Industrial Cream -->
+  <gazebo reference="plc_cabinet">
+    <visual>
+      <material>
+        <ambient>0.84 0.84 0.80 1.0</ambient>
+        <diffuse>0.88 0.88 0.84 1.0</diffuse>
+        <specular>0.3 0.3 0.3 1.0</specular>
+      </material>
+    </visual>
+  </gazebo>
+
+</robot>

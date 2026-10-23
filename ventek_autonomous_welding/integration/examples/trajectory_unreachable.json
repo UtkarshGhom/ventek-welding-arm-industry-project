@@ -1,0 +1,33 @@
+{
+  "schema_version": "0.1",
+  "producer": "team6",
+  "timestamp": "2026-10-25T10:01:00.000Z",
+  "trajectory_id": "traj_002_unreachable",
+  "robot_id": "kuka_kr6_r900",
+  "coordinate_frame": "robot_base",
+  "units": {
+    "position": "m",
+    "joint_position": "rad",
+    "time": "s"
+  },
+  "status": "FAILED_VALIDATION",
+  "joint_names": [
+    "joint_a1",
+    "joint_a2",
+    "joint_a3",
+    "joint_a4",
+    "joint_a5",
+    "joint_a6"
+  ],
+  "waypoints": [],
+  "validation": {
+    "ik": "FAIL",
+    "joint_limits": "FAIL",
+    "singularity": "NOT_AVAILABLE",
+    "collision": "NOT_RUN",
+    "velocity_acceleration": "NOT_RUN",
+    "torque": "NOT_AVAILABLE"
+  },
+  "next_action": "REJECTED",
+  "failure_reason": "Seam endpoints outside kinematic envelope (distance 1.285m exceeds max reach 0.901m)"
+}

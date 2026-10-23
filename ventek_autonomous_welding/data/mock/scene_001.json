@@ -1,0 +1,62 @@
+{
+  "schema_version": "0.1",
+  "producer": "team5",
+  "timestamp": "2026-10-25T10:00:00.000Z",
+  "seq": 1,
+  "frame_id": "assembly_world",
+  "units": {
+    "position": "m",
+    "angle": "rad"
+  },
+  "valid": true,
+  "calibration_status": "VERIFIED",
+  "parts": [
+    {
+      "part_id": "part_001",
+      "type": "workpiece",
+      "mesh_uri": "simulation/cell/meshes/workpiece_nominal.stl",
+      "pose": {
+        "position_m": [0.55, 0.0, 0.775],
+        "orientation_xyzw": [0.0, 0.0, 0.0, 1.0]
+      },
+      "confidence": 0.95
+    }
+  ],
+  "fixtures": [
+    {
+      "fixture_id": "fixture_base_01",
+      "type": "modular_table",
+      "pose": {
+        "position_m": [0.55, 0.0, 0.75],
+        "orientation_xyzw": [0.0, 0.0, 0.0, 1.0]
+      }
+    }
+  ],
+  "clamps": [
+    {
+      "clamp_id": "clamp_01",
+      "state": "locked",
+      "pose": {
+        "position_m": [0.41, -0.13, 0.775],
+        "orientation_xyzw": [0.0, 0.0, 0.0, 1.0]
+      }
+    }
+  ],
+  "candidate_joints": [
+    {
+      "joint_id": "candidate_001",
+      "part_ids": ["part_001"],
+      "joint_type": "fillet",
+      "start_point_m": [0.442, -0.0525, 0.785],
+      "end_point_m": [0.658, -0.0525, 0.785],
+      "direction_unit": [1.0, 0.0, 0.0],
+      "length_m": 0.216,
+      "local_normal": [0.0, 0.7071, 0.7071],
+      "confidence": 0.88,
+      "valid": true,
+      "weld_intent_confirmed": false,
+      "status": "CANDIDATE_REQUIRES_CONFIRMATION"
+    }
+  ],
+  "warnings": []
+}

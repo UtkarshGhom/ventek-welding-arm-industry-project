@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- VENTEK Spot Welding Cell Static Environment Macro                        -->
+  <!-- Enclosure Frame, Sliding Door, Dual Mobile Jig Carts, PLC Cabinet       -->
+  <!-- Proportionally Scaled (1.20x) with 2.68m Ceiling Height for Full Clearance-->
+  <!-- ======================================================================== -->
+
+  <xacro:macro name="cell_environment" params="parent">
+
+    <!-- Materials with Rich Aesthetics -->
+    <material name="cell_frame_dark">
+      <color rgba="0.22 0.24 0.28 1.0"/>
+    </material>
+    <material name="safety_glass_blue">
+      <color rgba="0.25 0.70 0.85 0.35"/>
+    </material>
+    <material name="fixture_machinery_blue">
+      <color rgba="0.14 0.36 0.64 1.0"/>
+    </material>
+    <material name="plc_cream">
+      <color rgba="0.88 0.88 0.84 1.0"/>
+    </material>
+    <material name="pedestal_steel">
+      <color rgba="0.26 0.28 0.32 1.0"/>
+    </material>
+    <material name="door_metallic">
+      <color rgba="0.82 0.84 0.88 1.0"/>
+    </material>
+    <material name="workpiece_steel">
+      <color rgba="0.75 0.78 0.82 1.0"/>
+    </material>
+
+    <!-- Mount Cell to World -->
+    <joint name="world_to_cell_base" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="cell_base"/>
+    </joint>
+
+    <!-- 1. CELL ENCLOSURE FRAME (Scaled 1.20x to 3.23m W x 4.85m D x 2.68m H) -->
+    <link name="cell_base">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/cell/visual/frame_cell.stl" scale="1.20 1.20 1.20"/>
+        </geometry>
+        <material name="cell_frame_dark"/>
+      </visual>
+
+      <!-- Collision Walls (Optimized Box Primitives for Fast Physics) -->
+      <!-- Back Wall -->
+      <collision>
+        <origin xyz="0.851 0.284 1.339" rpy="0 0 0"/>
+        <geometry>
+          <box size="3.24 0.10 2.68"/>
+        </geometry>
+      </collision>
+      <!-- Front Wall (Operator Side) -->
+      <collision>
+        <origin xyz="1.507 -4.450 1.339" rpy="0 0 0"/>
+        <geometry>
+          <box size="1.92 0.10 2.68"/>
+        </geometry>
+      </collision>
+      <!-- Left Wall -->
+      <collision>
+        <origin xyz="-0.706 -2.082 1.339" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.10 4.85 2.68"/>
+        </geometry>
+      </collision>
+      <!-- Right Wall -->
+      <collision>
+        <origin xyz="2.407 -2.082 1.339" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.10 4.85 2.68"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="0.851 -2.082 1.339" rpy="0 0 0"/>
+        <mass value="600.0"/>
+        <inertia ixx="1600.0" ixy="0.0" ixz="0.0" iyy="1100.0" iyz="0.0" izz="2000.0"/>
+      </inertial>
+    </link>
+
+    <!-- 2. SLIDING SERVICE DOOR (Scaled 1.20x) -->
+    <joint name="cell_door_joint" type="prismatic">
+      <origin xyz="-0.664 -0.337 0.290" rpy="0 0 0"/>
+      <parent link="cell_base"/>
+      <child link="cell_door"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="0.0" upper="0.90" effort="500" velocity="0.5"/>
+      <dynamics damping="5.0" friction="2.0"/>
+    </joint>
+
+    <link name="cell_door">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/cell/visual/door.stl" scale="1.20 1.20 1.20"/>
+        </geometry>
+        <material name="door_metallic"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 1.165" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.138 1.195 2.330"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 1.165" rpy="0 0 0"/>
+        <mass value="30.0"/>
+        <inertia ixx="12.0" ixy="0.0" ixz="0.0" iyy="12.0" iyz="0.0" izz="3.0"/>
+      </inertial>
+    </link>
+
+    <!-- 3. ROBOT PEDESTAL RISER -->
+    <joint name="world_to_robot_pedestal" type="fixed">
+      <origin xyz="-0.007 -2.006 0.0" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="robot_pedestal"/>
+    </joint>
+
+    <link name="robot_pedestal">
+      <visual>
+        <origin xyz="0 0 0.104" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.85 0.85 0.208"/>
+        </geometry>
+        <material name="pedestal_steel"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.104" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.85 0.85 0.208"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0.104" rpy="0 0 0"/>
+        <mass value="250.0"/>
+        <inertia ixx="16.0" ixy="0.0" ixz="0.0" iyy="16.0" iyz="0.0" izz="30.0"/>
+      </inertial>
+    </link>
+
+    <joint name="pedestal_to_top_surface" type="fixed">
+      <origin xyz="0 0 0.208" rpy="0 0 0"/>
+      <parent link="robot_pedestal"/>
+      <child link="robot_pedestal_top"/>
+    </joint>
+    <link name="robot_pedestal_top"/>
+
+    <!-- 4. FIXTURE CART - STATION 1 (Left Station from Operator View) -->
+    <joint name="cell_to_fixture_station_1" type="fixed">
+      <origin xyz="2.033 -2.996 0.0" rpy="0 0 0"/>
+      <parent link="cell_base"/>
+      <child link="fixture_station_1"/>
+    </joint>
+
+    <link name="fixture_station_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/cell/visual/fixture_cart.stl"/>
+        </geometry>
+        <material name="fixture_machinery_blue"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.063 -0.005 0.412" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.476 1.291 0.823"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="-0.063 -0.005 0.412" rpy="0 0 0"/>
+        <mass value="80.0"/>
+        <inertia ixx="12.0" ixy="0.0" ixz="0.0" iyy="3.0" iyz="0.0" izz="13.0"/>
+      </inertial>
+    </link>
+
+    <!-- Workpiece Clamped on Station 1 -->
+    <joint name="station_1_to_part" type="fixed">
+      <origin xyz="0.0 0.0 0.823" rpy="0 0 0"/>
+      <parent link="fixture_station_1"/>
+      <child link="workpiece_station_1"/>
+    </joint>
+    <link name="workpiece_station_1">
+      <visual>
+        <origin xyz="-0.06 0.0 0.02" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.22 0.70 0.035"/>
+        </geometry>
+        <material name="workpiece_steel"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.06 0.0 0.02" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.22 0.70 0.035"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- 5. FIXTURE CART - STATION 2 (Right Station - Manual Load/Unload) -->
+    <joint name="cell_to_fixture_station_2" type="fixed">
+      <origin xyz="2.000 -1.045 0.0" rpy="0 0 0"/>
+      <parent link="cell_base"/>
+      <child link="fixture_station_2"/>
+    </joint>
+
+    <link name="fixture_station_2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/cell/visual/fixture_cart.stl"/>
+        </geometry>
+        <material name="fixture_machinery_blue"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.063 -0.005 0.412" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.476 1.291 0.823"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="-0.063 -0.005 0.412" rpy="0 0 0"/>
+        <mass value="80.0"/>
+        <inertia ixx="12.0" ixy="0.0" ixz="0.0" iyy="3.0" iyz="0.0" izz="13.0"/>
+      </inertial>
+    </link>
+
+    <!-- Workpiece Clamped on Station 2 -->
+    <joint name="station_2_to_part" type="fixed">
+      <origin xyz="0.0 0.0 0.823" rpy="0 0 0"/>
+      <parent link="fixture_station_2"/>
+      <child link="workpiece_station_2"/>
+    </joint>
+    <link name="workpiece_station_2">
+      <visual>
+        <origin xyz="-0.06 0.0 0.02" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.22 0.70 0.035"/>
+        </geometry>
+        <material name="workpiece_steel"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.06 0.0 0.02" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.22 0.70 0.035"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- 6. PLC / FANUC R-30iA B-CABINET CONTROLLER -->
+    <joint name="world_to_plc_cabinet" type="fixed">
+      <origin xyz="1.937 0.736 0.0" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="plc_cabinet"/>
+    </joint>
+
+    <link name="plc_cabinet">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/cell/visual/plc_cabinet.stl" scale="1.20 1.20 1.20"/>
+        </geometry>
+        <material name="plc_cream"/>
+      </visual>
+      <collision>
+        <origin xyz="0.007 0.072 0.672" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.923 0.844 1.345"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0.007 0.072 0.672" rpy="0 0 0"/>
+        <mass value="120.0"/>
+        <inertia ixx="18.0" ixy="0.0" ixz="0.0" iyy="17.0" iyz="0.0" izz="12.0"/>
+      </inertial>
+    </link>
+
+  </xacro:macro>
+
+</robot>

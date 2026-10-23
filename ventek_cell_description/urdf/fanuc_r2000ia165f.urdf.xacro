@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- FANUC R-2000iA/165F Macro Definition                                     -->
+  <!-- Standard ROS-Industrial Kinematics & Gazebo Sim Dynamic Properties      -->
+  <!-- Proportionally Scaled (scale=0.75) for Optimal Cell Clearance & Vision   -->
+  <!-- ======================================================================== -->
+
+  <xacro:macro name="fanuc_r2000ia165f" params="prefix parent *origin scale:=0.75">
+
+    <xacro:property name="arm_scale" value="${scale}"/>
+    <xacro:property name="scale_cube" value="${arm_scale * arm_scale * arm_scale}"/>
+    <xacro:property name="scale_p5" value="${arm_scale * arm_scale * arm_scale * arm_scale * arm_scale}"/>
+
+    <!-- Material Definitions -->
+    <material name="${prefix}fanuc_yellow">
+      <color rgba="0.96 0.76 0.05 1.0"/>
+    </material>
+    <material name="${prefix}fanuc_black">
+      <color rgba="0.15 0.15 0.15 1.0"/>
+    </material>
+    <material name="${prefix}fanuc_gray">
+      <color rgba="0.45 0.45 0.48 1.0"/>
+    </material>
+
+    <!-- Mount to Parent -->
+    <joint name="${prefix}base_mount_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${prefix}base_link"/>
+    </joint>
+
+    <!-- BASE LINK -->
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/visual/base_link.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+        <material name="${prefix}fanuc_black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/collision/base_link.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${-0.038 * arm_scale} 0.0 ${0.168 * arm_scale}" rpy="0 0 0"/>
+        <mass value="${280.0 * scale_cube}"/>
+        <inertia ixx="${18.5 * scale_p5}" ixy="0.0" ixz="${1.2 * scale_p5}" iyy="${21.3 * scale_p5}" iyz="0.0" izz="${24.8 * scale_p5}"/>
+      </inertial>
+    </link>
+
+    <!-- JOINT 1 -->
+    <joint name="${prefix}joint_1" type="revolute">
+      <origin xyz="0 0 ${0.670 * arm_scale}" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}link_1"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-3.14159" upper="3.14159" effort="12000" velocity="1.8326"/>
+      <dynamics damping="120.0" friction="25.0"/>
+    </joint>
+
+    <!-- LINK 1 -->
+    <link name="${prefix}link_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/visual/link_1.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+        <material name="${prefix}fanuc_yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/collision/link_1.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${0.092 * arm_scale} ${0.052 * arm_scale} ${-0.086 * arm_scale}" rpy="0 0 0"/>
+        <mass value="${220.0 * scale_cube}"/>
+        <inertia ixx="${14.2 * scale_p5}" ixy="${-1.1 * scale_p5}" ixz="${2.3 * scale_p5}" iyy="${16.5 * scale_p5}" iyz="${0.8 * scale_p5}" izz="${15.1 * scale_p5}"/>
+      </inertial>
+    </link>
+
+    <!-- JOINT 2 -->
+    <joint name="${prefix}joint_2" type="revolute">
+      <origin xyz="${0.312 * arm_scale} 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_1"/>
+      <child link="${prefix}link_2"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="-1.0472" upper="1.3090" effort="14000" velocity="1.8326"/>
+      <dynamics damping="160.0" friction="35.0"/>
+    </joint>
+
+    <!-- LINK 2 -->
+    <link name="${prefix}link_2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/visual/link_2.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+        <material name="${prefix}fanuc_yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/collision/link_2.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${-0.013 * arm_scale} ${0.203 * arm_scale} ${0.523 * arm_scale}" rpy="0 0 0"/>
+        <mass value="${180.0 * scale_cube}"/>
+        <inertia ixx="${28.4 * scale_p5}" ixy="${0.5 * scale_p5}" ixz="${-1.4 * scale_p5}" iyy="${26.1 * scale_p5}" iyz="${3.2 * scale_p5}" izz="${8.7 * scale_p5}"/>
+      </inertial>
+    </link>
+
+    <!-- JOINT 3 -->
+    <joint name="${prefix}joint_3" type="revolute">
+      <origin xyz="0 0 ${1.075 * arm_scale}" rpy="0 0 0"/>
+      <parent link="${prefix}link_2"/>
+      <child link="${prefix}link_3"/>
+      <axis xyz="0 -1 0"/>
+      <limit lower="-3.2288" upper="4.0142" effort="10000" velocity="1.8326"/>
+      <dynamics damping="120.0" friction="25.0"/>
+    </joint>
+
+    <!-- LINK 3 -->
+    <link name="${prefix}link_3">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/visual/link_3.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+        <material name="${prefix}fanuc_yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/collision/link_3.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${0.412 * arm_scale} ${0.025 * arm_scale} ${0.086 * arm_scale}" rpy="0 0 0"/>
+        <mass value="${140.0 * scale_cube}"/>
+        <inertia ixx="${4.8 * scale_p5}" ixy="${0.3 * scale_p5}" ixz="${1.1 * scale_p5}" iyy="${12.6 * scale_p5}" iyz="${-0.2 * scale_p5}" izz="${11.4 * scale_p5}"/>
+      </inertial>
+    </link>
+
+    <!-- JOINT 4 -->
+    <joint name="${prefix}joint_4" type="revolute">
+      <origin xyz="0 0 ${0.225 * arm_scale}" rpy="0 0 0"/>
+      <parent link="${prefix}link_3"/>
+      <child link="${prefix}link_4"/>
+      <axis xyz="-1 0 0"/>
+      <limit lower="-6.28318" upper="6.28318" effort="5000" velocity="2.2689"/>
+      <dynamics damping="50.0" friction="10.0"/>
+    </joint>
+
+    <!-- LINK 4 -->
+    <link name="${prefix}link_4">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/visual/link_4.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+        <material name="${prefix}fanuc_yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/collision/link_4.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${1.195 * arm_scale} 0.0 0.0" rpy="0 0 0"/>
+        <mass value="${100.0 * scale_cube}"/>
+        <inertia ixx="${1.2 * scale_p5}" ixy="0.0" ixz="0.0" iyy="${8.4 * scale_p5}" iyz="0.0" izz="${8.4 * scale_p5}"/>
+      </inertial>
+    </link>
+
+    <!-- JOINT 5 -->
+    <joint name="${prefix}joint_5" type="revolute">
+      <origin xyz="${1.280 * arm_scale} 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_4"/>
+      <child link="${prefix}link_5"/>
+      <axis xyz="0 -1 0"/>
+      <limit lower="-2.1816" upper="2.1816" effort="5000" velocity="2.2689"/>
+      <dynamics damping="30.0" friction="8.0"/>
+    </joint>
+
+    <!-- LINK 5 -->
+    <link name="${prefix}link_5">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/visual/link_5.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+        <material name="${prefix}fanuc_yellow"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/collision/link_5.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${0.047 * arm_scale} ${-0.012 * arm_scale} 0.0" rpy="0 0 0"/>
+        <mass value="${40.0 * scale_cube}"/>
+        <inertia ixx="${0.65 * scale_p5}" ixy="${0.05 * scale_p5}" ixz="0.0" iyy="${0.82 * scale_p5}" iyz="0.0" izz="${0.78 * scale_p5}"/>
+      </inertial>
+    </link>
+
+    <!-- JOINT 6 -->
+    <joint name="${prefix}joint_6" type="revolute">
+      <origin xyz="${0.215 * arm_scale} 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_5"/>
+      <child link="${prefix}link_6"/>
+      <axis xyz="-1 0 0"/>
+      <limit lower="-6.28318" upper="6.28318" effort="3000" velocity="3.6651"/>
+      <dynamics damping="15.0" friction="4.0"/>
+    </joint>
+
+    <!-- LINK 6 (FLANGE BASE) -->
+    <link name="${prefix}link_6">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/visual/link_6.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+        <material name="${prefix}fanuc_black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_cell_description/meshes/robot/collision/link_6.stl" scale="${arm_scale} ${arm_scale} ${arm_scale}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${0.005 * arm_scale} 0.0 0.0" rpy="0 0 0"/>
+        <mass value="${15.0 * scale_cube}"/>
+        <inertia ixx="${0.08 * scale_p5}" ixy="0.0" ixz="0.0" iyy="${0.05 * scale_p5}" iyz="0.0" izz="${0.05 * scale_p5}"/>
+      </inertial>
+    </link>
+
+    <!-- FLANGE FRAME (Mechanical mounting faceplate) -->
+    <link name="${prefix}flange"/>
+    <joint name="${prefix}joint_6_flange" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_6"/>
+      <child link="${prefix}flange"/>
+    </joint>
+
+    <!-- TOOL0 FRAME (ROS-Industrial standardized tool frame: Z points outward) -->
+    <link name="${prefix}tool0"/>
+    <joint name="${prefix}link_6_tool0" type="fixed">
+      <origin xyz="0 0 0" rpy="${pi} ${-pi/2.0} 0"/>
+      <parent link="${prefix}link_6"/>
+      <child link="${prefix}tool0"/>
+    </joint>
+
+  </xacro:macro>
+
+</robot>

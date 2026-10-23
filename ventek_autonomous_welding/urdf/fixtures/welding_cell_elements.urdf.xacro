@@ -1,0 +1,422 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- VENTEK Cell Elements: Table, Fixture, Workpiece, Clamps, Camera, Fence   -->
+  <!-- ======================================================================== -->
+
+  <xacro:macro name="welding_cell_elements" params="parent:='world'">
+
+    <!-- 1. Robot Riser Pedestal -->
+    <link name="robot_pedestal">
+      <visual>
+        <origin xyz="0 0 0.275" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.18" length="0.55"/>
+        </geometry>
+        <material name="pedestal_steel">
+          <color rgba="0.25 0.25 0.28 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.275" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.18" length="0.55"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="80.0"/>
+        <origin xyz="0 0 0.275" rpy="0 0 0"/>
+        <inertia ixx="3.0" ixy="0" ixz="0" iyy="3.0" iyz="0" izz="1.5"/>
+      </inertial>
+    </link>
+
+    <joint name="pedestal_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="robot_pedestal"/>
+    </joint>
+
+    <!-- 2. Modular 3D Welding Table (Siegmund / Demmeler style) -->
+    <link name="welding_table">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/welding_table.dae"/>
+        </geometry>
+        <material name="welding_table_slate">
+          <color rgba="0.22 0.24 0.28 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/welding_table.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="250.0"/>
+        <origin xyz="0 0 0.375" rpy="0 0 0"/>
+        <inertia ixx="20.0" ixy="0" ixz="0" iyy="35.0" iyz="0" izz="45.0"/>
+      </inertial>
+    </link>
+
+    <joint name="table_joint" type="fixed">
+      <origin xyz="0.55 0.0 0.0" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="welding_table"/>
+    </joint>
+
+    <!-- 3. Precision Fixture Base Plate & Locating Blocks -->
+    <link name="fixture_base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/fixture_base.dae"/>
+        </geometry>
+        <material name="fixture_anodized_blue">
+          <color rgba="0.12 0.35 0.68 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/fixture_base.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="25.0"/>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+        <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.5" iyz="0" izz="0.7"/>
+      </inertial>
+    </link>
+
+    <!-- Table top is at z = 0.75 -->
+    <joint name="fixture_base_joint" type="fixed">
+      <origin xyz="0.55 0.0 0.75" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="fixture_base_link"/>
+    </joint>
+
+    <!-- Alias matching simulation plan (fixture_frame) -->
+    <link name="fixture_frame"/>
+    <joint name="fixture_frame_alias" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="fixture_base_link"/>
+      <child link="fixture_frame"/>
+    </joint>
+
+    <!-- 4. Workpiece (Part) - 240 x 125 x 80mm Fabricated Box Subassembly -->
+    <link name="part_frame">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/workpiece_nominal.dae"/>
+        </geometry>
+        <material name="workpiece_milled_steel">
+          <color rgba="0.75 0.77 0.82 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/workpiece_nominal.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="5.8"/>
+        <origin xyz="0 0 0.035" rpy="0 0 0"/>
+        <inertia ixx="0.015" ixy="0" ixz="0" iyy="0.035" iyz="0" izz="0.045"/>
+      </inertial>
+    </link>
+
+    <!-- Mounted on fixture plate top (base plate thickness = 0.025m) -->
+    <joint name="workpiece_joint" type="fixed">
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <parent link="fixture_base_link"/>
+      <child link="part_frame"/>
+    </joint>
+
+    <!-- 5. Destaco-Style Vertical Handle Toggle Clamps (4 units) -->
+    <!-- Clamp 1: Front-Left -->
+    <link name="clamp_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/clamp_toggle.dae"/>
+        </geometry>
+        <material name="clamp_destaco_red">
+          <color rgba="0.85 0.12 0.12 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/clamp_toggle.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.75"/>
+        <origin xyz="0.02 0 0.04" rpy="0 0 0"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+      </inertial>
+    </link>
+
+    <joint name="clamp_1_joint" type="fixed">
+      <!-- Front left pad pointing inward (+Y) toward workpiece -->
+      <origin xyz="-0.14 -0.13 0.025" rpy="0 0 1.570796"/>
+      <parent link="fixture_base_link"/>
+      <child link="clamp_1"/>
+    </joint>
+
+    <!-- Clamp 2: Front-Right -->
+    <link name="clamp_2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/clamp_toggle.dae"/>
+        </geometry>
+        <material name="clamp_destaco_red">
+          <color rgba="0.85 0.12 0.12 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/clamp_toggle.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.75"/>
+        <origin xyz="0.02 0 0.04" rpy="0 0 0"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+      </inertial>
+    </link>
+
+    <joint name="clamp_2_joint" type="fixed">
+      <!-- Front right pad pointing inward (+Y) -->
+      <origin xyz="0.14 -0.13 0.025" rpy="0 0 1.570796"/>
+      <parent link="fixture_base_link"/>
+      <child link="clamp_2"/>
+    </joint>
+
+    <!-- Clamp 3: Rear-Left -->
+    <link name="clamp_3">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/clamp_toggle.dae"/>
+        </geometry>
+        <material name="clamp_destaco_red">
+          <color rgba="0.85 0.12 0.12 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/clamp_toggle.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.75"/>
+        <origin xyz="0.02 0 0.04" rpy="0 0 0"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+      </inertial>
+    </link>
+
+    <joint name="clamp_3_joint" type="fixed">
+      <!-- Rear left pad pointing inward (-Y) -->
+      <origin xyz="-0.14 0.13 0.025" rpy="0 0 -1.570796"/>
+      <parent link="fixture_base_link"/>
+      <child link="clamp_3"/>
+    </joint>
+
+    <!-- Clamp 4: Rear-Right -->
+    <link name="clamp_4">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/clamp_toggle.dae"/>
+        </geometry>
+        <material name="clamp_destaco_red">
+          <color rgba="0.85 0.12 0.12 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/clamp_toggle.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.75"/>
+        <origin xyz="0.02 0 0.04" rpy="0 0 0"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+      </inertial>
+    </link>
+
+    <joint name="clamp_4_joint" type="fixed">
+      <!-- Rear right pad pointing inward (-Y) -->
+      <origin xyz="0.14 0.13 0.025" rpy="0 0 -1.570796"/>
+      <parent link="fixture_base_link"/>
+      <child link="clamp_4"/>
+    </joint>
+
+    <!-- 6. Auxiliary Cell Equipment -->
+    <!-- KUKA KRC4 Robot Controller Cabinet -->
+    <link name="krc4_cabinet">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/krc4_controller.dae"/>
+        </geometry>
+        <material name="controller_cabinet_white">
+          <color rgba="0.75 0.77 0.80 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.5" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.60 0.50 1.00"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="krc4_cabinet_joint" type="fixed">
+      <origin xyz="-0.65 0.75 0.0" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="krc4_cabinet"/>
+    </joint>
+
+    <!-- Welding Power Source Unit -->
+    <link name="welding_power_unit">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ventek_autonomous_welding/simulation/cell/meshes/welding_power_source.dae"/>
+        </geometry>
+        <material name="power_source_crimson">
+          <color rgba="0.65 0.15 0.15 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.35" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.50 0.40 0.70"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="welding_power_unit_joint" type="fixed">
+      <origin xyz="-0.65 -0.75 0.0" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="welding_power_unit"/>
+    </joint>
+
+    <!-- ======================================================================== -->
+    <!-- Gazebo Shading Materials for Fixed Cell Elements                        -->
+    <!-- ======================================================================== -->
+    <gazebo reference="robot_pedestal">
+      <visual>
+        <material>
+          <ambient>0.20 0.20 0.22 1.0</ambient>
+          <diffuse>0.25 0.25 0.28 1.0</diffuse>
+          <specular>0.3 0.3 0.3 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <gazebo reference="welding_table">
+      <visual>
+        <material>
+          <ambient>0.18 0.20 0.23 1.0</ambient>
+          <diffuse>0.22 0.24 0.28 1.0</diffuse>
+          <specular>0.30 0.30 0.35 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <gazebo reference="fixture_base_link">
+      <visual>
+        <material>
+          <ambient>0.08 0.24 0.50 1.0</ambient>
+          <diffuse>0.12 0.35 0.68 1.0</diffuse>
+          <specular>0.40 0.40 0.50 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <gazebo reference="part_frame">
+      <visual>
+        <material>
+          <ambient>0.45 0.48 0.52 1.0</ambient>
+          <diffuse>0.75 0.77 0.82 1.0</diffuse>
+          <specular>0.60 0.60 0.65 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <gazebo reference="clamp_1">
+      <visual>
+        <material>
+          <ambient>0.55 0.08 0.08 1.0</ambient>
+          <diffuse>0.85 0.12 0.12 1.0</diffuse>
+          <specular>0.35 0.25 0.25 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <gazebo reference="clamp_2">
+      <visual>
+        <material>
+          <ambient>0.55 0.08 0.08 1.0</ambient>
+          <diffuse>0.85 0.12 0.12 1.0</diffuse>
+          <specular>0.35 0.25 0.25 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <gazebo reference="clamp_3">
+      <visual>
+        <material>
+          <ambient>0.55 0.08 0.08 1.0</ambient>
+          <diffuse>0.85 0.12 0.12 1.0</diffuse>
+          <specular>0.35 0.25 0.25 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <gazebo reference="clamp_4">
+      <visual>
+        <material>
+          <ambient>0.55 0.08 0.08 1.0</ambient>
+          <diffuse>0.85 0.12 0.12 1.0</diffuse>
+          <specular>0.35 0.25 0.25 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+
+    <gazebo reference="krc4_cabinet">
+      <visual>
+        <material>
+          <ambient>0.45 0.46 0.48 1.0</ambient>
+          <diffuse>0.75 0.77 0.80 1.0</diffuse>
+          <specular>0.25 0.25 0.25 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+    <gazebo reference="welding_power_unit">
+      <visual>
+        <material>
+          <ambient>0.35 0.08 0.08 1.0</ambient>
+          <diffuse>0.65 0.15 0.15 1.0</diffuse>
+          <specular>0.30 0.25 0.25 1.0</specular>
+        </material>
+      </visual>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

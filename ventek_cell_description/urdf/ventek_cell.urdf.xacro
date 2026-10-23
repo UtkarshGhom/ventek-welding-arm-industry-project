@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<robot name="ventek_spot_welding_cell" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- ======================================================================== -->
+  <!-- VENTEK Complete Spot Welding Cell Architecture Unified XACRO            -->
+  <!-- ======================================================================== -->
+
+  <!-- World Coordinate Frame -->
+  <link name="world"/>
+
+  <!-- Sub-assembly Includes -->
+  <xacro:include filename="fanuc_r2000ia165f.urdf.xacro"/>
+  <xacro:include filename="spot_gun.urdf.xacro"/>
+  <xacro:include filename="realsense_d435.urdf.xacro"/>
+  <xacro:include filename="cell_environment.urdf.xacro"/>
+  <xacro:include filename="ventek_cell.gazebo.xacro"/>
+
+  <!-- 1. Instantiate Static Cell Environment (Frame, Door, Dual Fixture Carts, PLC) -->
+  <xacro:cell_environment parent="world"/>
+
+  <!-- 2. Instantiate FANUC R-2000iA/165F Robot Arm on Pedestal Top Surface (Scale=0.75) -->
+  <xacro:fanuc_r2000ia165f prefix="" parent="robot_pedestal_top" scale="0.75">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:fanuc_r2000ia165f>
+
+  <!-- 3. Instantiate Heavy Spot Welding Gun on Robot tool0 Frame (Scale=0.75) -->
+  <xacro:spot_welding_gun prefix="" parent="tool0" scale="0.75">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:spot_welding_gun>
+
+  <!-- 4. Instantiate Intel RealSense D435 RGB-D Eye-in-Hand Camera on tool0 (Scale=0.75) -->
+  <xacro:realsense_d435 prefix="" parent="tool0" scale="0.75">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:realsense_d435>
+
+  <!-- ======================================================================== -->
+  <!-- ros2_control Hardware Interface Definition                               -->
+  <!-- Default Initial State: Nominal Workpiece Inspection Pose Facing Station 1-->
+  <!-- ======================================================================== -->
+  <ros2_control name="FanucCellHardwareInterface" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+
+    <joint name="joint_1">
+      <command_interface name="position">
+        <param name="min">-3.14159</param>
+        <param name="max">3.14159</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">-0.4872</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="joint_2">
+      <command_interface name="position">
+        <param name="min">-1.0472</param>
+        <param name="max">1.3090</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.6147</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="joint_3">
+      <command_interface name="position">
+        <param name="min">-3.2288</param>
+        <param name="max">4.0142</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">1.0346</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="joint_4">
+      <command_interface name="position">
+        <param name="min">-6.28318</param>
+        <param name="max">6.28318</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="joint_5">
+      <command_interface name="position">
+        <param name="min">-2.1816</param>
+        <param name="max">2.1816</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">-1.4147</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="joint_6">
+      <command_interface name="position">
+        <param name="min">-6.28318</param>
+        <param name="max">6.28318</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="cell_door_joint">
+      <command_interface name="position">
+        <param name="min">0.0</param>
+        <param name="max">0.90</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+</robot>

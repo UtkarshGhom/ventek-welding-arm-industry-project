@@ -1,0 +1,22 @@
+# Build and install artifacts
+build/
+install/
+log/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# Editor and OS files
+.DS_Store
+*.swp
+*~
+
+# CAD backups
+*.FCBak
+
+# Local backup directory
+ventek_backup/

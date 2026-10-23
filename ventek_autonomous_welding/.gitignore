@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# ROS 2
+build/
+install/
+log/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
