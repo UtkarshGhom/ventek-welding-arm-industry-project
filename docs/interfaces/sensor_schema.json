@@ -1,1 +1,149 @@
-{}
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProcessFeedbackSchema",
+  "description": "Team 3 output: synchronized process analytics, data quality, anomaly detection and advisory feedback",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "producer",
+    "timestamp",
+    "seq",
+    "frame_id",
+    "valid",
+    "data_quality",
+    "features",
+    "anomaly",
+    "predictions",
+    "advisory_team4",
+    "supervisory_team1",
+    "model"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "producer": {
+      "type": "string",
+      "const": "team3"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "frame_id": {
+      "type": "string"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "data_quality": {
+      "type": "object",
+      "required": [
+        "status",
+        "missing_channels",
+        "stale_channels",
+        "window_start",
+        "window_end"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["OK", "DEGRADED", "STALE", "INVALID"]
+        },
+        "missing_channels": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "stale_channels": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "window_start": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "window_end": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "required": [
+        "current_mean_A",
+        "voltage_mean_V",
+        "travel_speed_mean_m_s",
+        "tracking_error_mean_m"
+      ],
+      "properties": {
+        "current_mean_A": { "type": ["number", "null"] },
+        "voltage_mean_V": { "type": ["number", "null"] },
+        "travel_speed_mean_m_s": { "type": ["number", "null"] },
+        "tracking_error_mean_m": { "type": ["number", "null"] }
+      }
+    },
+    "anomaly": {
+      "type": "object",
+      "required": ["status", "score", "label", "method"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["OK", "ANOMALY", "NOT_AVAILABLE"]
+        },
+        "score": { "type": ["number", "null"] },
+        "label": { "type": ["string", "null"] },
+        "method": { "type": "string" }
+      }
+    },
+    "predictions": {
+      "type": "object",
+      "required": [
+        "quality_score",
+        "defect_probability",
+        "seam_offset_m",
+        "uncertainty",
+        "status"
+      ],
+      "properties": {
+        "quality_score": { "type": ["number", "null"] },
+        "defect_probability": { "type": ["number", "null"] },
+        "seam_offset_m": { "type": ["number", "null"] },
+        "uncertainty": { "type": ["number", "null"] },
+        "status": {
+          "type": "string",
+          "enum": ["OK", "NOT_AVAILABLE", "PREDICTED"]
+        }
+      }
+    },
+    "advisory_team4": {
+      "type": "object",
+      "required": ["recommendation", "reason"],
+      "properties": {
+        "recommendation": { "type": "string" },
+        "reason": { "type": "string" }
+      }
+    },
+    "supervisory_team1": {
+      "type": "object",
+      "required": ["alert", "reason_code"],
+      "properties": {
+        "alert": { "type": "boolean" },
+        "reason_code": { "type": "string" }
+      }
+    },
+    "model": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    }
+  }
+}

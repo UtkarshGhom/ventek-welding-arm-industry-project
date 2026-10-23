@@ -1,1 +1,122 @@
-{}
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TrajectorySchema",
+  "description": "Team 6 output: candidate robot motion, IK, waypoints and validation metrics",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "producer",
+    "timestamp",
+    "trajectory_id",
+    "robot_id",
+    "coordinate_frame",
+    "units",
+    "status",
+    "joint_names",
+    "waypoints",
+    "validation",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "producer": {
+      "type": "string",
+      "const": "team6"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trajectory_id": {
+      "type": "string"
+    },
+    "robot_id": {
+      "type": "string"
+    },
+    "coordinate_frame": {
+      "type": "string"
+    },
+    "units": {
+      "type": "object",
+      "required": ["position", "joint_position", "time"],
+      "properties": {
+        "position": { "type": "string", "enum": ["m"] },
+        "joint_position": { "type": "string", "enum": ["rad"] },
+        "time": { "type": "string", "enum": ["s"] }
+      }
+    },
+    "status": {
+      "type": "string"
+    },
+    "joint_names": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "waypoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "time_from_start_s",
+          "joint_positions_rad",
+          "tcp_position_m",
+          "tcp_orientation_xyzw",
+          "phase"
+        ],
+        "properties": {
+          "time_from_start_s": { "type": "number", "minimum": 0.0 },
+          "joint_positions_rad": {
+            "type": "array",
+            "items": { "type": "number" }
+          },
+          "tcp_position_m": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "tcp_orientation_xyzw": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "phase": {
+            "type": "string",
+            "enum": ["APPROACH", "WELD", "RETREAT", "TRANSFER"]
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "ik",
+        "joint_limits",
+        "singularity",
+        "collision",
+        "velocity_acceleration",
+        "torque"
+      ],
+      "properties": {
+        "ik": { "type": "string", "enum": ["PASS", "FAIL", "NOT_RUN", "NOT_AVAILABLE"] },
+        "joint_limits": { "type": "string", "enum": ["PASS", "FAIL", "NOT_RUN", "NOT_AVAILABLE"] },
+        "singularity": { "type": "string", "enum": ["PASS", "FAIL", "NOT_RUN", "NOT_AVAILABLE"] },
+        "collision": { "type": "string", "enum": ["PASS", "FAIL", "NOT_RUN", "NOT_AVAILABLE"] },
+        "velocity_acceleration": { "type": "string", "enum": ["PASS", "FAIL", "NOT_RUN", "NOT_AVAILABLE"] },
+        "torque": { "type": "string", "enum": ["PASS", "FAIL", "NOT_RUN", "NOT_AVAILABLE"] }
+      }
+    },
+    "next_action": {
+      "type": "string",
+      "enum": ["READY_FOR_SIMULATION", "REJECTED", "REPLAN_REQUIRED", "HOLD"]
+    },
+    "failure_reason": {
+      "type": ["string", "null"]
+    }
+  }
+}

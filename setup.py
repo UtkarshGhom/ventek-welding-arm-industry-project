@@ -12,7 +12,7 @@ def package_files(directory):
     return paths
 
 extra_files = []
-for d in ["urdf", "simulation", "config", "data", "launch", "docs"]:
+for d in ["urdf", "simulation", "config", "data", "launch", "docs", "integration"]:
     for f in package_files(d):
         target_dir = os.path.join("share", package_name, os.path.dirname(f))
         extra_files.append((target_dir, [f]))
@@ -25,7 +25,7 @@ setup(
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
         ("share/" + package_name, ["package.xml", "model.config"]),
     ] + extra_files,
-    install_requires=["setuptools"],
+    install_requires=["setuptools", "jsonschema"],
     zip_safe=True,
     maintainer="Utkarsh",
     maintainer_email="utkarsh@ventek.com",
@@ -37,6 +37,7 @@ setup(
             "verify_cell_setup = scripts.verify_cell_setup:main",
             "view_depth_feed = scripts.view_depth_feed:main",
             "joint_state_to_gz = scripts.joint_state_to_gz:main",
+            "run_pipeline = scripts.run_integration_pipeline:main",
         ],
     },
 )

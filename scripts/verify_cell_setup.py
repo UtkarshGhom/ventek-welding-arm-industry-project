@@ -222,8 +222,8 @@ def test_scenarios_and_contracts():
         if os.path.exists(path):
             with open(path, "r") as f:
                 data = json.load(f)
-                has_header = "header" in data
-                print_result(f"Mock Contract {jf}", has_header, f"{len(data)} root keys")
+                valid_format = ("schema_version" in data and "producer" in data) or ("header" in data)
+                print_result(f"Mock Contract {jf}", valid_format, f"{len(data)} root keys, schema_version={data.get('schema_version', 'legacy')}")
         else:
             all_ok = False
             print_result(f"Mock Contract {jf}", False, "File missing")

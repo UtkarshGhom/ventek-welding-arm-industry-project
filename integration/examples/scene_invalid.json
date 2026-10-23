@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1",
+  "producer": "team5",
+  "timestamp": "invalid-timestamp-string",
+  "seq": -1,
+  "frame_id": "assembly_world",
+  "units": {
+    "position": "feet"
+  },
+  "calibration_status": "CORRUPTED_STATUS",
+  "parts": "not-an-array",
+  "candidate_joints": []
+}

@@ -1,31 +1,45 @@
 {
-  "header": {
-    "timestamp": "2026-10-18T00:00:02Z",
-    "frame_id": "world",
-    "source": "team2_cell_coordination"
+  "schema_version": "0.1",
+  "producer": "team2",
+  "timestamp": "2026-10-25T10:01:05.000Z",
+  "seq": 12,
+  "frame_id": "robot_base",
+  "valid": true,
+  "robot": {
+    "robot_state": "idle",
+    "joint_names": [
+      "joint_a1",
+      "joint_a2",
+      "joint_a3",
+      "joint_a4",
+      "joint_a5",
+      "joint_a6"
+    ],
+    "joint_positions_rad": [0.0, -0.5, 0.8, 0.0, 0.6, 0.0],
+    "tcp_position_m": [0.442, -0.0525, 0.835],
+    "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071]
   },
-  "robot_state": {
-    "controller_mode": "AUTOMATIC",
-    "operational_state": "READY",
-    "e_stop_active": false,
-    "safety_interlock_closed": true,
-    "current_joint_positions": [0.0, -1.047, 1.571, 0.0, 1.047, 0.0],
-    "current_tcp_pose": [0.450, 0.0, 1.10, 0.0, 0.785, 0.0]
+  "fixture": {
+    "state": "locked",
+    "angle_rad": 0.0
   },
-  "fixture_state": {
-    "fixture_id": "modular_table_01",
-    "clamps": {
-      "clamp_1": {"state": "LOCKED", "pressure_bar": 6.2},
-      "clamp_2": {"state": "LOCKED", "pressure_bar": 6.2},
-      "clamp_3": {"state": "LOCKED", "pressure_bar": 6.2},
-      "clamp_4": {"state": "LOCKED", "pressure_bar": 6.2}
-    },
-    "workpiece_seated": true
+  "clamps": {
+    "state": "locked"
   },
-  "welding_power_source": {
-    "arc_on": false,
-    "gas_flow_active": true,
-    "wire_feed_ready": true,
-    "alarms": []
+  "process": {
+    "welding_active": false,
+    "current_A": null,
+    "voltage_V": null,
+    "travel_speed_m_s": null
+  },
+  "safety": {
+    "plc_ok": true,
+    "estop_active": false,
+    "faults": []
+  },
+  "last_command": {
+    "decision_id": "cmd_0001",
+    "status": "completed",
+    "message": "simulation command completed"
   }
 }

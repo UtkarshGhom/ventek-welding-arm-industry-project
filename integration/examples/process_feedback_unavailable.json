@@ -1,0 +1,46 @@
+{
+  "schema_version": "0.1",
+  "producer": "team3",
+  "timestamp": "2026-10-25T10:01:05.050Z",
+  "seq": 25,
+  "frame_id": "robot_base",
+  "valid": true,
+  "data_quality": {
+    "status": "OK",
+    "missing_channels": [],
+    "stale_channels": [],
+    "window_start": "2026-10-25T10:01:05.000Z",
+    "window_end": "2026-10-25T10:01:05.050Z"
+  },
+  "features": {
+    "current_mean_A": null,
+    "voltage_mean_V": null,
+    "travel_speed_mean_m_s": null,
+    "tracking_error_mean_m": null
+  },
+  "anomaly": {
+    "status": "NOT_AVAILABLE",
+    "score": null,
+    "label": null,
+    "method": "rule_baseline"
+  },
+  "predictions": {
+    "quality_score": null,
+    "defect_probability": null,
+    "seam_offset_m": null,
+    "uncertainty": null,
+    "status": "NOT_AVAILABLE"
+  },
+  "advisory_team4": {
+    "recommendation": "NO_ADVISORY",
+    "reason": "NO_VALIDATED_MODEL_OR_SIGNAL"
+  },
+  "supervisory_team1": {
+    "alert": false,
+    "reason_code": "NO_VALIDATED_ALERT"
+  },
+  "model": {
+    "name": "rule_baseline",
+    "version": "0.1"
+  }
+}

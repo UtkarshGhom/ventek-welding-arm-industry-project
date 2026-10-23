@@ -1,1 +1,129 @@
-{}
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CellStateSchema",
+  "description": "Team 2 output: cell orchestration, simulated execution state, and command acknowledgement",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "producer",
+    "timestamp",
+    "seq",
+    "frame_id",
+    "valid",
+    "robot",
+    "fixture",
+    "clamps",
+    "process",
+    "safety",
+    "last_command"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "producer": {
+      "type": "string",
+      "const": "team2"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "frame_id": {
+      "type": "string"
+    },
+    "valid": {
+      "type": "boolean"
+    },
+    "robot": {
+      "type": "object",
+      "required": [
+        "robot_state",
+        "joint_names",
+        "joint_positions_rad",
+        "tcp_position_m",
+        "tcp_orientation_xyzw"
+      ],
+      "properties": {
+        "robot_state": {
+          "type": "string",
+          "enum": ["idle", "moving", "welding", "paused", "fault", "homing"]
+        },
+        "joint_names": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "joint_positions_rad": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "tcp_position_m": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "tcp_orientation_xyzw": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "required": ["state", "angle_rad"],
+      "properties": {
+        "state": { "type": "string", "enum": ["locked", "unlocked", "moving", "error"] },
+        "angle_rad": { "type": "number" }
+      }
+    },
+    "clamps": {
+      "type": "object",
+      "required": ["state"],
+      "properties": {
+        "state": { "type": "string", "enum": ["locked", "unlocked", "error"] }
+      }
+    },
+    "process": {
+      "type": "object",
+      "required": ["welding_active", "current_A", "voltage_V", "travel_speed_m_s"],
+      "properties": {
+        "welding_active": { "type": "boolean" },
+        "current_A": { "type": ["number", "null"] },
+        "voltage_V": { "type": ["number", "null"] },
+        "travel_speed_m_s": { "type": ["number", "null"] }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "required": ["plc_ok", "estop_active", "faults"],
+      "properties": {
+        "plc_ok": { "type": "boolean" },
+        "estop_active": { "type": "boolean" },
+        "faults": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "last_command": {
+      "type": "object",
+      "required": ["decision_id", "status", "message"],
+      "properties": {
+        "decision_id": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["accepted", "in_progress", "completed", "failed", "timed_out"]
+        },
+        "message": { "type": "string" }
+      }
+    }
+  }
+}

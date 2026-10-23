@@ -1,65 +1,62 @@
 {
-  "header": {
-    "timestamp": "2026-10-18T00:00:01Z",
-    "frame_id": "world",
-    "source": "team6_path_planning"
+  "schema_version": "0.1",
+  "producer": "team6",
+  "timestamp": "2026-10-25T10:01:00.000Z",
+  "trajectory_id": "traj_001",
+  "robot_id": "kuka_kr6_r900",
+  "coordinate_frame": "robot_base",
+  "units": {
+    "position": "m",
+    "joint_position": "rad",
+    "time": "s"
   },
+  "status": "VALIDATED_CANDIDATE",
   "joint_names": [
-    "joint_a1", "joint_a2", "joint_a3", "joint_a4", "joint_a5", "joint_a6"
+    "joint_a1",
+    "joint_a2",
+    "joint_a3",
+    "joint_a4",
+    "joint_a5",
+    "joint_a6"
   ],
-  "trajectory_metadata": {
-    "total_waypoints": 6,
-    "total_duration_s": 27.5,
-    "welding_process": "MIG",
-    "wire_feed_m_min": 6.5,
-    "current_A": 220,
-    "voltage_V": 24,
-    "travel_speed_mm_s": 8.0,
-    "collision_checked": true,
-    "ik_validated": true
-  },
   "waypoints": [
     {
-      "index": 0,
-      "phase": "home",
       "time_from_start_s": 0.0,
-      "joint_positions_rad": [0.0, -1.047, 1.571, 0.0, 1.047, 0.0],
-      "tcp_pose_world": [0.450, 0.0, 1.10, 0.0, 0.785, 0.0]
+      "joint_positions_rad": [0.0, -0.5, 0.8, 0.0, 0.6, 0.0],
+      "tcp_position_m": [0.442, -0.0525, 0.835],
+      "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071],
+      "phase": "APPROACH"
     },
     {
-      "index": 1,
-      "phase": "approach",
-      "time_from_start_s": 3.0,
-      "joint_positions_rad": [-0.150, -0.650, 1.350, 0.0, 0.870, -0.150],
-      "tcp_pose_world": [0.442, -0.0525, 0.835, 0.0, 0.785, 0.0]
+      "time_from_start_s": 2.0,
+      "joint_positions_rad": [0.05, -0.45, 0.75, 0.0, 0.65, 0.0],
+      "tcp_position_m": [0.442, -0.0525, 0.785],
+      "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071],
+      "phase": "WELD"
     },
     {
-      "index": 2,
-      "phase": "arc_start",
-      "time_from_start_s": 4.5,
-      "joint_positions_rad": [-0.152, -0.630, 1.320, 0.0, 0.890, -0.152],
-      "tcp_pose_world": [0.442, -0.0525, 0.785, 0.0, 0.785, 0.0]
+      "time_from_start_s": 12.0,
+      "joint_positions_rad": [0.12, -0.40, 0.70, 0.0, 0.70, 0.0],
+      "tcp_position_m": [0.658, -0.0525, 0.785],
+      "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071],
+      "phase": "WELD"
     },
     {
-      "index": 3,
-      "phase": "active_weld_mid",
-      "time_from_start_s": 15.0,
-      "joint_positions_rad": [0.0, -0.600, 1.300, 0.0, 0.880, 0.0],
-      "tcp_pose_world": [0.550, -0.0525, 0.785, 0.0, 0.785, 0.0]
-    },
-    {
-      "index": 4,
-      "phase": "arc_end",
-      "time_from_start_s": 25.5,
-      "joint_positions_rad": [0.152, -0.630, 1.320, 0.0, 0.890, 0.152],
-      "tcp_pose_world": [0.658, -0.0525, 0.785, 0.0, 0.785, 0.0]
-    },
-    {
-      "index": 5,
-      "phase": "retreat",
-      "time_from_start_s": 27.5,
-      "joint_positions_rad": [0.150, -0.650, 1.350, 0.0, 0.870, 0.150],
-      "tcp_pose_world": [0.658, -0.0525, 0.835, 0.0, 0.785, 0.0]
+      "time_from_start_s": 14.0,
+      "joint_positions_rad": [0.10, -0.48, 0.78, 0.0, 0.62, 0.0],
+      "tcp_position_m": [0.658, -0.0525, 0.835],
+      "tcp_orientation_xyzw": [0.0, 0.7071, 0.0, 0.7071],
+      "phase": "RETREAT"
     }
-  ]
+  ],
+  "validation": {
+    "ik": "PASS",
+    "joint_limits": "PASS",
+    "singularity": "NOT_AVAILABLE",
+    "collision": "PASS",
+    "velocity_acceleration": "PASS",
+    "torque": "NOT_AVAILABLE"
+  },
+  "next_action": "READY_FOR_SIMULATION",
+  "failure_reason": null
 }
