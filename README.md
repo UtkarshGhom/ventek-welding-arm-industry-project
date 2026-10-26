@@ -270,10 +270,22 @@ ros2 launch ventek_cell_description gazebo_cell.launch.py
 ros2 launch ventek_autonomous_welding simulation.launch.py
 ```
 
+### Running on macOS (Apple Silicon M2+) or Containerized via Docker
+👉 **[`docker/README.md`](docker/README.md)**  
+*(Native ARM64 container with Web-based 3D Desktop via noVNC on port 6080, CLI shell, and test runner)*
+
+```bash
+cd ventek_project/docker
+docker compose up desktop      # Web Desktop at http://localhost:6080/vnc.html
+docker compose run --rm dev    # Interactive shell
+docker compose run --rm test   # Run full 46 automated tests
+```
+
 ---
 
 ## 10. Reference Specifications & Documentation Index
 
+- **[`docker/README.md`](docker/README.md)** — Multi-architecture Docker & macOS Apple Silicon (M2+) deployment guide.
 - **[`VENTEK_Consolidated_Architecture_Baseline_and_JSON_Contracts.md`](VENTEK_Consolidated_Architecture_Baseline_and_JSON_Contracts.md)** — Architectural baseline and frozen v0.1 JSON schemas.
 - **[`VENTEK_Final_Product_Approach_Review_Teams_1_3_4_5_6.md`](VENTEK_Final_Product_Approach_Review_Teams_1_3_4_5_6.md)** — Subsystem responsibilities, product criteria, and algorithm upgrade gates.
 - **[`ventek_autonomous_welding/docs/SIMULATION_GUIDE.md`](ventek_autonomous_welding/docs/SIMULATION_GUIDE.md)** — Gazebo Sim Harmonic, 28 coordinate frames, joint control sliders, depth viewer, PBR lighting, and topic catalog.

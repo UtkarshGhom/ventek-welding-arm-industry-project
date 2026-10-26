@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  # 1. Interactive Developer Shell
+  # Usage: docker compose run --rm dev
+  dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ventek-autonomous-welding:latest
+    container_name: ventek_dev
+    stdin_open: true
+    tty: true
+    network_mode: host
+    volumes:
+      # Mount project repository so live changes on Mac host are reflected instantly
+      - ..:/home/ventek/ventek_ws/ventek_project
+    working_dir: /home/ventek/ventek_ws/ventek_project
+    command: /bin/bash
+
+  # 2. Web-Based 3D Desktop (Recommended for Apple Silicon Mac - M2, M3, M4)
+  # Access in browser at: http://localhost:6080/vnc.html?autoconnect=true
+  # Usage: docker compose up desktop
+  desktop:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ventek-autonomous-welding:latest
+    container_name: ventek_desktop
+    environment:
+      - ENABLE_VNC=1
+      - LIBGL_ALWAYS_SOFTWARE=1
+    ports:
+      - "6080:6080"
+    volumes:
+      - ..:/home/ventek/ventek_ws/ventek_project
+    working_dir: /home/ventek/ventek_ws/ventek_project
+    command: /bin/bash -c "sleep infinity"
+
+  # 3. Automated Test Suite (Run all 46 unit & integration tests)
+  # Usage: docker compose run --rm test
+  test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ventek-autonomous-welding:latest
+    container_name: ventek_test
+    volumes:
+      - ..:/home/ventek/ventek_ws/ventek_project
+    working_dir: /home/ventek/ventek_ws/ventek_project
+    command: >
+      /bin/bash -c "
+        echo '=== Running VENTEK Automated Test Suite in Docker ===' &&
+        python3 scripts/verify_cell_setup.py &&
+        PYTHONPATH=. python3 -m pytest tests/ integration/tests/ &&
+        PYTHONPATH=. python3 scripts/run_integration_pipeline.py
+      "
